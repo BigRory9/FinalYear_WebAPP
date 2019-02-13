@@ -1,35 +1,36 @@
-<!DOCTYPE html>
+<!DOCTYPE html >
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <html>
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="stylesheet"  href="/static/css/style.css" >
-    <script src="/static/js/charge.js"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <title>Pay Page</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Cache-Control" content="no-cache">
+<meta http-equiv="Expires" content="sat, 01 Dec 2001 00:00:00 GMT">
+<script src="https://checkout.stripe.com/checkout.js"></script>
 </head>
+<h2 align="center">
+	<font><strong>Tickets that can be purchased</strong></font>
+</h2>
 <body>
-<div class="container">
-<h2 class="my-4 text-center">Intro to React Course [$50}</h2>
-<form action="./charge.php" method="post" id="payment-form">
-  <div class="form-row">
-  <input type="text" name="first" class="form-control mb-3 StripeElement StripeElement--empty" placeholder="First Name">
-  <input type="text" name="last" class="form-control mb-3 StripeElement StripeElement--empty" placeholder="Last Name">
-  <input type="text" name="email" type="email" class="form-control mb-3 StripeElement StripeElement--empty" placeholder="Email Address">
-    <div id="card-element" class="form-control">
-      <!-- A Stripe Element will be inserted here. -->
-    </div>
-
-    <!-- Used to display form errors. -->
-    <div id="card-errors" role="alert"></div>
-  </div>
-
-  <button>Submit Payment</button>
+HELLO
+	<form action='/charge' method='POST' id='checkout-form'novalidate="novalidate">
+    <input type='hidden' th:value='${amount}' name='amount' />
+    <label>Price:<span th:text='${amount/100}' /></label>
+    <!-- NOTE: data-key/data-amount/data-currency will be rendered by Thymeleaf -->
+    <script
+       src='https://checkout.stripe.com/checkout.js'
+       class='stripe-button'
+       th:attr='data-key=${stripePublicKey}, 
+         data-amount=${amount}, 
+         data-currency=${currency}'
+       data-name='Baeldung'
+       data-description='Spring course checkout'
+       data-image
+         ='http://www.baeldung.com/wp-content/themes/baeldung/favicon/android-chrome-192x192.png'
+       data-locale='auto'
+       data-zip-code='false'>
+   </script>
 </form>
-</div>
-
-<script src="https://js.stripe.com/v3/"></script>
-<script src="js/charge.js"></script>
 </body>
 </html>

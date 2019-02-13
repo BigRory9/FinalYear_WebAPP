@@ -33,7 +33,7 @@ public class TicketController {
 //	}
 	
 	@RequestMapping(value = "/purchase-tickets/{id}", method=RequestMethod.GET)
-	public void purchase(@PathVariable("id") String id,HttpServletResponse httpServletResponse,HttpSession session,@ModelAttribute User customer) {
+	public String purchase(@PathVariable("id") String id,HttpServletResponse httpServletResponse,HttpSession session,@ModelAttribute User customer) {
 //		Event event = userService.getOneEvent(id);
 //		Ticket ticket = new Ticket (event.getDisplayName());
 //		User user = (User) session.getAttribute("user");
@@ -41,9 +41,9 @@ public class TicketController {
 //		ticketService.createTicket(ticket);
 //		user.addTicket(ticket);
 //		userService.updateUser(id, user);
-		httpServletResponse.setHeader("Location", "http://localhost/paypage/");
-	    httpServletResponse.setStatus(302);
-//		return "creditCard";
+//		httpServletResponse.setHeader("Location", "http://localhost/paypage/");
+//	    httpServletResponse.setStatus(302);
+		return "creditCard";
 	}
 }
 
