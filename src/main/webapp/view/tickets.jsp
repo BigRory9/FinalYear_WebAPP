@@ -12,21 +12,27 @@
 	<font><strong>Tickets that can be purchased</strong></font>
 </h2>
 <table align="center" cellpadding="5" cellspacing="5" border="1">
-<thead>
-	<tr bgcolor="#A52A2A">
-		<th>Id</th>
-		<th>Name</th>
-		<th>Purchase</th>
-	</tr>
-</thead>
-<tbody>
-	<c:forEach var="ticket" items="${tickets}">
-		<tr bgcolor="#DEB887">
-			<td>${ticket.id}</td>
-			<td>${ticket.name}</td>
-			 <td><a href="<c:url value='/delete-tickets/${ticket.id}' />" >Purchase</a></td>
+	<thead>
+		<tr bgcolor="#A52A2A">
+			<th>Id</th>
+			<th>Name</th>
+			<th>Purchase</th>
 		</tr>
-	</c:forEach>
-</tbody>
+	</thead>
+	<tbody>
+		<c:forEach var="ticket" items="${tickets}">
+			<tr bgcolor="#DEB887">
+				<td>${ticket.id}</td>
+				<td>${ticket.name}</td>
+				<td><script src="https://checkout.stripe.com/checkout.js"
+						class="stripe-button" data-key="pk_test_6ypfwwRrX7SPmxZNpY6Fl49M"
+						data-amount="999" data-name="Demo Site"
+						data-description="Example charge"
+						data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+						data-locale="auto" data-currency="eur">
+				</script> <a href="<c:url value='/delete-tickets/${ticket.id}' />">Purchase</a></td>
+			</tr>
+		</c:forEach>
+	</tbody>
 </table>
 </html>

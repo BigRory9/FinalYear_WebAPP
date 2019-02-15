@@ -32,6 +32,7 @@
 				<th>Id</th>
 				<th>Name</th>
 				<th>Arena</th>
+				<th>Price</th>
 				<th>Date</th>
 				<th>Time</th>
 				<th>Purchase a ticket</th>
@@ -43,6 +44,7 @@
 					<td>${list.id}</td>
 					<td>${list.displayName}</td>
 					<td>${list.arena}</td>
+					<td>${list.price}</td>
 					<td>${list.date}</td>
 					<td>${list.time}</td>
 					<td><a href="<c:url value='/purchase-tickets/${list.id}' />">Purchase</a></td>

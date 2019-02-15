@@ -7,15 +7,27 @@ public class Event {
 	String displayName;
 	String date;
 	String time;
+	int price;
 	
-	public Event(String id, String arena, String displayName, String date, String time) {
+	public Event(String id, String arena, String displayName,int price, String date, String time) {
 		super();
 		this.id = id;
 		this.arena = arena;
+		this.price = price;
 		this.displayName = displayName;
 		this.date = date;
 		this.time = time;
 	}
+	
+	public int getPrice() {
+		return price;
+	}
+
+
+	public void setPrice(int price) {
+		this.price = price;
+	}
+
 
 	public String getId() {
 		return id;

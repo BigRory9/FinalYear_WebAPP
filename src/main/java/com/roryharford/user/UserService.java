@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -37,6 +38,7 @@ public class UserService {
 			JSONObject feedjson = responseJson.getJSONObject("results");
 			JSONArray entriesJSON = feedjson.getJSONArray("event");
 			String id, displayName, arena, date, time;
+			int price;
 			for (int i = 0; i < entriesJSON.length(); i++) {
 //				 if(entriesJSON.get(i).equals("country")) {
 //				 System.out.println("\n"+entriesJSON.get(i));
@@ -53,8 +55,12 @@ public class UserService {
 					jobject = jobject.getAsJsonObject("start");
 					date = jobject.get("date").toString();
 					time = jobject.get("time").toString();
+					Random r = new Random();
+					int low = 10;
+					int high = 100;
+					 price = r.nextInt(high-low) + low;
 					
-					Event event = new Event(id,displayName,arena,date,time);
+					Event event = new Event(id,displayName,arena,price,date,time);
 					list.add(event);
 				}
 			}
