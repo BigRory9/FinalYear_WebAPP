@@ -1,5 +1,7 @@
 package com.roryharford.user;
 
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -7,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -37,6 +40,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
+
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
@@ -60,8 +64,6 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
-
-	
 
 //	@Autowired
 //	private TicketService ticketService;
@@ -137,29 +139,41 @@ public class UserController {
 
 	@PostMapping("/login")
 	public String verifyCustomer(@ModelAttribute UserLoginDetails CustomerDetails, HttpSession session,
-			RedirectAttributes attr, final BindingResult binding,Model model) {
+			RedirectAttributes attr, final BindingResult binding, Model model) {
 		// Your code here
 		System.out.println(CustomerDetails.getInputEmail() + " " + CustomerDetails.getInputPassword());
-		User user = userService.loginCustomer(CustomerDetails.getInputEmail(),
-				CustomerDetails.getInputPassword());
+		User user = userService.loginCustomer(CustomerDetails.getInputEmail(), CustomerDetails.getInputPassword());
 		if (user == null) {
 			attr.addFlashAttribute("org.springframework.validation.BindingResult.register", binding);
 			attr.addFlashAttribute("msg", "Wrong Details");
 			return "redirect:/";
-		}
-		else
-		{
-		session.setAttribute("user", user);
-		for (int i = 0; i < userService.getEventList().size(); i++) {
-			System.out.println(userService.getEventList().get(i).toString());
-		}
+		} else {
 
-		if(userService.getEventList().size()<0)
-		{
-			System.out.println("NO TICKETS");
-		}
-		model.addAttribute("lists", userService.getEventList());
-		return "success";
+//			String imageName = "Image Number "+user.getId();
+//			
+//			BasicAWSCredentials creds = new BasicAWSCredentials("AKIAI5BANVNXM3EHHWMQ",
+//					"vVsj1Kd+iQ0LKyOgSuS5PVM8vJ00fdGMll1jCc6r");
+//			AmazonS3 s3Client = AmazonS3Client.builder().withRegion("eu-west-1")
+//					.withCredentials(new AWSStaticCredentialsProvider(creds)).build();
+//
+//			// Get a refernce to the image Object
+//			S3Object s3object = s3Client.getObject(new GetObjectRequest("tickets-images-fare", imageName));
+//
+//			//add to a model
+//	      	model.addAttribute("picUrl", s3object.getObjectContent().getHttpRequest().getURI().toString());
+//
+//			System.out.println(s3object.getObjectContent().getHttpRequest().getURI().toString());
+
+			session.setAttribute("user", user);
+			for (int i = 0; i < userService.getEventList().size(); i++) {
+				System.out.println(userService.getEventList().get(i).toString());
+			}
+
+			if (userService.getEventList().size() < 0) {
+				System.out.println("NO TICKETS");
+			}
+			model.addAttribute("lists", userService.getEventList());
+			return "success";
 		}
 	}
 
@@ -175,27 +189,34 @@ public class UserController {
 	@PostMapping("/register")
 	public String registerCustomer(Model model, @ModelAttribute User customer, HttpSession session,
 			@RequestParam("file") MultipartFile file) {
-		BasicAWSCredentials creds = new BasicAWSCredentials("AKIAITAEL7BGCI2WOZMA",
-				"czY/LBxMNNgabRanQdt1pNm7jbM+Fl2iDKOFdjup");
+
+		BasicAWSCredentials creds = new BasicAWSCredentials("AKIAI5BANVNXM3EHHWMQ",
+				"vVsj1Kd+iQ0LKyOgSuS5PVM8vJ00fdGMll1jCc6r");
 		AmazonS3 s3Client = AmazonS3Client.builder().withRegion("eu-west-1")
 				.withCredentials(new AWSStaticCredentialsProvider(creds)).build();
 
 		InputStream is;
 		try {
-			is = file.getInputStream();
-
-			// save on s3 wont allow me to save with public read access
-			s3Client.putObject(new PutObjectRequest("tickets-fare-images", "newFile.jpg", is, new ObjectMetadata())
-					.withCannedAcl(CannedAccessControlList.PublicRead));
-
-			// Get a refernce to the image Object
-			S3Object s3object = s3Client.getObject(new GetObjectRequest("tickets-fare-images", "newFile.jpg"));
 			User customertype = userService.createCustomer(customer);
 			if (customertype == null) {
 				return "redirect:/";
 			}
-			session.setAttribute("customer", customer);
 
+			session.setAttribute("customer", customer);
+			is = file.getInputStream();
+			// save on s3 wont allow me to save with public read access
+//			tickets-images-fare
+			String imageName = "Image Number " + customer.getId();
+			s3Client.putObject(new PutObjectRequest("tickets-images-fare", imageName, is, new ObjectMetadata())
+					.withCannedAcl(CannedAccessControlList.PublicRead));
+
+			// Get a refernce to the image Object
+			S3Object s3object = s3Client.getObject(new GetObjectRequest("tickets-images-fare", imageName));
+
+//			//add to a model
+			model.addAttribute("picUrl", s3object.getObjectContent().getHttpRequest().getURI().toString());
+
+			System.out.println(s3object.getObjectContent().getHttpRequest().getURI().toString());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -24,7 +24,10 @@
 </head>
 
 <body class="text-center">
-	Hello ${user.name}
+	Hello ${user.email}
+	 <%-- <br>Image here: <img src= ${picUrl} />--%>
+	
+	
 
 	<table align="center" cellpadding="5" cellspacing="5" border="1">
 		<thead>

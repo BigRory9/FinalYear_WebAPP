@@ -20,6 +20,7 @@
 		</tr>
 	</thead>
 	<tbody>
+	Image here: <img src="https://tickets-images-fare.s3-eu-west-1.amazonaws.com/Image%20Number%2033" />
 		<c:forEach var="ticket" items="${tickets}">
 			<tr bgcolor="#DEB887">
 				<td>${ticket.id}</td>

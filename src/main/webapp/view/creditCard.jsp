@@ -22,8 +22,8 @@
 	<form action="${requestScope['javax.servlet.forward.request_uri']}/process" method="POST">
 		<script src="https://checkout.stripe.com/checkout.js"
 			class="stripe-button" data-key="pk_test_6ypfwwRrX7SPmxZNpY6Fl49M"
-			data-amount="999" data-name="TicketFare"
-			data-description="Example charge"
+			data-amount= data-name="TicketFare"
+			data-description="Purchasing a Fare Ticket"
 			data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
 			data-locale="auto" data-currency="eur">
 			
