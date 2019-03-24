@@ -18,8 +18,12 @@
 <body>
 	Choose Payment
 	Type:
+	<%-- ${id} --%>
 	<br> Pay With Credit Card:
-	<form action="${requestScope['javax.servlet.forward.request_uri']}/process" method="POST">
+	<%-- <td><a href="<c:url value='/purchase-tickets'><c:param name="id" value="${list.id}"/></c:url>">Purchase</a></td> --%>
+	<form action="${requestScope['javax.servlet.forward.request_uri']}/process"  method="POST">
+	<input type="hidden" name="id" value=${id} />
+	<!-- <input name="id"  value ={id}/> -->
 		<script src="https://checkout.stripe.com/checkout.js"
 			class="stripe-button" data-key="pk_test_6ypfwwRrX7SPmxZNpY6Fl49M"
 			data-amount= data-name="TicketFare"

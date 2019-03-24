@@ -39,6 +39,7 @@
 				<th>Date</th>
 				<th>Time</th>
 				<th>Purchase a ticket</th>
+				<th>Image Url</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -50,7 +51,8 @@
 					<td>${list.price}</td>
 					<td>${list.date}</td>
 					<td>${list.time}</td>
-					<td><a href="<c:url value='/purchase-tickets/${list.id}' />">Purchase</a></td>
+					<td><a href="<c:url value='/purchase-tickets'><c:param name="id" value="${list.id}"/></c:url>">Purchase</a></td>
+					<td>${list.imageUrl}</td>
 				</tr>
 			</c:forEach>
 		</tbody>

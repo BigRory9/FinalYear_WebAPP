@@ -10,6 +10,7 @@
 <body>
 
 	<!------ Include the above in your HEAD tag ---------->
+	<!--  Brand Logo: <img src="http://127.0.0.1:127/images/FYPBRAND.png" alt="logo"/>  <br>  -->
 	 Hello ${customer.name}
 	<div id="login-overlay" class="modal-dialog">
 		<div class="modal-content">

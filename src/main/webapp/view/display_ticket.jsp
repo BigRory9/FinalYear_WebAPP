@@ -20,20 +20,29 @@
 	rel="stylesheet">
 
 <!-- Custom styles for this template -->
-<link href="index.css" rel="stylesheet">
+<link href="http://127.0.0.1:127/css/index.css" rel="stylesheet">
 </head>
 
 <body class="text-center">
-	Your Ticket ${name}
-	<br>${eventName}</br>
+	<p>Your Ticket ${name}</p>
+	<br>${eventName}
+	<!-- <img src="http://127.0.0.1:127/images/FYPBRAND.png" alt="logo"/>  <br> -->
 	<div style="background-size: 30% 30%;">
-		<img role="presentation" sizes="100vw" src=${picUrl } 
-		 style="position: relative; object-fit: cover; object-position: center; max-height: 300px; max-width: 300px">
+		<img src="http://127.0.0.1:127/images/FYPBRAND.png" alt="logo"
+			style="position: relative; object-fit: cover; object-position: center; max-height: 300px; max-width: 300px; padding-left: 250px;"
+			align="middle"  /> <br>
+	</div>
+
+	<div class="column">
+		<img role="presentation" sizes="100vw" src=${picUrl }
+			style="position: relative; object-fit: cover; object-position: center; max-height: 300px; max-width: 300px">
 	</div>
 	<br>
-	<br> QR CODE here :
-	<img src="data:image/jpeg;base64,${QRcode}" />
+	<div class="column">
+		<img src="data:image/jpeg;base64,${QRcode}" align="middle" />
+	</div>
 	<br>
+	<a href="<c:url value="/download-PDF/${ticket_id}" />"  target="_blank" method="POST" novalidate="novalidate">Open as PDF</a>
 	<br>
 	<br>
 

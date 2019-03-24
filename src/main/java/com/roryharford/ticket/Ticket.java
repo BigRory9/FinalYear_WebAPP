@@ -10,65 +10,84 @@ import javax.persistence.Table;
 import com.roryharford.user.User;
 
 @Entity
-@Table(name="ticket")
+@Table(name = "ticket")
 public class Ticket {
-	
+
 	@Id
-	@GeneratedValue(strategy= GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
-	
+
 	private String name;
-	private String arena; 
+	private String arena;
 	private String date;
-	private int price;
+	private double price;
 	private String time;
-	
-	
+	private String base64Encoded;
+
 	public Ticket() {
-		
+
 	}
-	public Ticket(String name, String arena, String date, int price, String time) {
+
+	public Ticket(String name, String arena, String date, double price, String time, String base64Encoded) {
 		this.name = name;
 		this.arena = arena;
 		this.date = date;
 		this.price = price;
 		this.time = time;
 	}
-	
-	
+
 	public int getId() {
 		return id;
 	}
+
 	public void setId(int id) {
 		this.id = id;
 	}
+
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	public String getArena() {
 		return arena;
 	}
+
+	public String getBase64Encoded() {
+		return base64Encoded;
+	}
+
+	public void setBase64Encoded(String base64Encoded) {
+		this.base64Encoded = base64Encoded;
+	}
+
 	public void setArena(String arena) {
 		this.arena = arena;
 	}
+
 	public String getDate() {
 		return date;
 	}
+
 	public void setDate(String date) {
 		this.date = date;
 	}
-	public int getPrice() {
+
+	public double getPrice() {
 		return price;
 	}
-	public void setPrice(int price) {
+
+	public void setPrice(double price) {
 		this.price = price;
 	}
+
 	public String getTime() {
 		return time;
 	}
+
 	public void setTime(String time) {
 		this.time = time;
 	}

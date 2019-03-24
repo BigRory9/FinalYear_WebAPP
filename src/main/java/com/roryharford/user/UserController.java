@@ -2,8 +2,15 @@ package com.roryharford.user;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -11,15 +18,24 @@ import java.util.Optional;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.catalina.connector.Request;
 import org.apache.jasper.tagplugins.jstl.core.Url;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -53,6 +69,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.roryharford.event.Event;
 import com.roryharford.ticket.Ticket;
 import com.roryharford.ticket.TicketController;
@@ -70,7 +89,6 @@ public class UserController {
 
 	@RequestMapping(value = "/")
 	public String index() {
-		userService.createEventArray();
 		return "homepage";
 	}
 
@@ -148,22 +166,8 @@ public class UserController {
 			attr.addFlashAttribute("msg", "Wrong Details");
 			return "redirect:/";
 		} else {
-
-//			String imageName = "Image Number "+user.getId();
-//			
-//			BasicAWSCredentials creds = new BasicAWSCredentials("AKIAI5BANVNXM3EHHWMQ",
-//					"vVsj1Kd+iQ0LKyOgSuS5PVM8vJ00fdGMll1jCc6r");
-//			AmazonS3 s3Client = AmazonS3Client.builder().withRegion("eu-west-1")
-//					.withCredentials(new AWSStaticCredentialsProvider(creds)).build();
-//
-//			// Get a refernce to the image Object
-//			S3Object s3object = s3Client.getObject(new GetObjectRequest("tickets-images-fare", imageName));
-//
-//			//add to a model
-//	      	model.addAttribute("picUrl", s3object.getObjectContent().getHttpRequest().getURI().toString());
-//
-//			System.out.println(s3object.getObjectContent().getHttpRequest().getURI().toString());
-
+			userService.createEventArray();
+			model.addAttribute("lists", userService.getEventList());
 			session.setAttribute("user", user);
 			for (int i = 0; i < userService.getEventList().size(); i++) {
 				System.out.println(userService.getEventList().get(i).toString());
@@ -172,11 +176,12 @@ public class UserController {
 			if (userService.getEventList().size() < 0) {
 				System.out.println("NO TICKETS");
 			}
-			model.addAttribute("lists", userService.getEventList());
+			
 			return "success";
 		}
 	}
 
+	
 	@RequestMapping("/logout")
 	public String logoutCustomer(HttpServletRequest request) {
 
@@ -197,6 +202,7 @@ public class UserController {
 
 		InputStream is;
 		try {
+			userService.createEventArray();
 			User customertype = userService.createCustomer(customer);
 			if (customertype == null) {
 				return "redirect:/";
@@ -230,9 +236,5 @@ public class UserController {
 		return "register";
 	}
 
-//	@RequestMapping("/{userId}/tickets")
-//	public TicketController getCommentResource() {
-//		return new TicketController();
-//	}
 
 }
