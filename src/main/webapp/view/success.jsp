@@ -11,6 +11,8 @@
 <meta name="description" content="">
 <meta name="author" content="">
 <link rel="icon" href="../../../../favicon.ico">
+<link href="https://fonts.googleapis.com/css?family=Montserrat"
+	rel="stylesheet">
 
 <title>You have Logged in</title>
 
@@ -20,14 +22,60 @@
 	rel="stylesheet">
 
 <!-- Custom styles for this template -->
-<link href="index.css" rel="stylesheet">
+<link href="http://127.0.0.1:127/css/success.css" rel="stylesheet">
 </head>
 
 <body class="text-center">
 	Hello ${user.email}
-	 <%-- <br>Image here: <img src= ${picUrl} />--%>
-	
-	
+	<%-- <br>Image here: <img src= ${picUrl} />--%>
+
+	<div id="gig-search">
+		<c:forEach var="list" items="${lists}">
+			<div class="search-result">
+				<img src="${list.imageUrl}" />
+				<!-- <p>${list.id}</p> -->
+				<div class="search-content">
+					<p class="artist">${list.displayName}</p>
+					<div class="search-info">
+						<p class="location">${list.arena}</p>
+						<div class="datetime">
+							<p class="date">${list.date}</p>
+							<p class="time">${list.time}</p>
+						</div>
+					</div>
+				</div>
+				<div class="pricing-info">
+					<p class="price">€ ${list.price}</p>
+					<!-- <p><a href="<c:url value='/purchase-tickets'><c:param name="id" value="${list.id}"/></c:url>">Purchase</a></p> -->
+					<button class="purchase-button">Purchase</button>
+				</div>
+			</div>
+		</c:forEach>
+	</div>
+
+	<div id="gig-list">
+		<c:forEach var="list" items="${lists}">
+			<div class="gig">
+				<div class="start">
+					<img src="${list.imageUrl}" />
+					<!-- <p>${list.id}</p> -->
+					<p class="artist">${list.displayName}</p>
+				</div>
+				<div class="end">
+					<div class="info">
+						<p class="location">${list.arena}</p>
+						<div class="datetime">
+							<p class="date">${list.date}</p>
+							<p class="time">${list.time}</p>
+						</div>
+					</div>
+					<p class="price">€ ${list.price}</p>
+					<!-- <p><a href="<c:url value='/purchase-tickets'><c:param name="id" value="${list.id}"/></c:url>">Purchase</a></p> -->
+					<button class="purchase-button">Purchase</button>
+				</div>
+			</div>
+		</c:forEach>
+	</div>
 
 	<table align="center" cellpadding="5" cellspacing="5" border="1">
 		<thead>
@@ -51,7 +99,8 @@
 					<td>${list.price}</td>
 					<td>${list.date}</td>
 					<td>${list.time}</td>
-					<td><a href="<c:url value='/purchase-tickets'><c:param name="id" value="${list.id}"/></c:url>">Purchase</a></td>
+					<td><a
+						href="<c:url value='/purchase-tickets'><c:param name="id" value="${list.id}"/></c:url>">Purchase</a></td>
 					<td>${list.imageUrl}</td>
 				</tr>
 			</c:forEach>
