@@ -10,9 +10,18 @@
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="">
 <meta name="author" content="">
-<link rel="icon" href="../../../../favicon.ico">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Cache-Control" content="no-cache">
+<meta http-equiv="Expires" content="sat, 01 Dec 2001 00:00:00 GMT">
+<script src="https://checkout.stripe.com/checkout.js"></script>
+<script type="text/javascript">
+	Stripe.setPublishableKey('pk_test_6ypfwwRrX7SPmxZNpY6Fl49M');
+</script>
+</head>
 
-<title>You have Logged in</title>
+<title>Homepage</title>
 
 <!-- Bootstrap core CSS -->
 <link

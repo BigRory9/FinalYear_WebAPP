@@ -1,9 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+
 <!doctype html>
 <head>
-<link href="static/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="static/js/bootstrap.min.js"></script>
+<link href="http://127.0.0.1:127/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="http://127.0.0.1:127/css/bootstrap.css"  rel="stylesheet" id="bootstrap-css"></script>
 <script src="static/js/jquery.min.js"></script>
 <title>Welcome to FairTicket</title>
 </head>

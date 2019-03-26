@@ -1,6 +1,8 @@
 package com.roryharford.user;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,10 +31,11 @@ public class UserService {
 
 	private ArrayList<Event> list = new ArrayList<Event>();
 
-	public List<Event> createEventArray() {
+	public List<Event> createEventArray(int pageNum) {
 		try {
 			list = new ArrayList<Event>();
-			String url = "https://app.ticketmaster.com/discovery/v2/events.json?countryCode=IE&apikey=thlzRyuDZ6IGtUirirhnDPinG0Sgk2Ay";
+			String url = "https://app.ticketmaster.com/discovery/v2/events.json?countryCode=IE&apikey=thlzRyuDZ6IGtUirirhnDPinG0Sgk2Ay&page="
+					+ pageNum;
 			String json = Jsoup.connect(url).ignoreContentType(true).execute().body();
 			JSONObject obj = new JSONObject(json);
 			JSONObject responseJson = obj.getJSONObject("_embedded");
@@ -43,7 +46,10 @@ public class UserService {
 //			("HEUJDNMK!"+entryJSON.length());
 			String id = "", name = "", arena = "", date = null, time = null;
 			double price = -1;
+			String minPrice="0";
+			String maxPrice="0";
 			String imageUrl = "";
+			boolean found = false;
 			for (int i = 0; i < entriesJSON.length(); i++) {
 //				 if(entriesJSON.get(i).equals("country")) {
 //				 ("\n"+entriesJSON.get(i));
@@ -58,13 +64,23 @@ public class UserService {
 				JsonObject jobject = jelement.getAsJsonObject();
 
 				if (!jobject.get("name").equals(null)) {
+
 					id = jobject.get("id").toString();
 					name = jobject.get("name").toString();
 					JsonArray imagesArray = jobject.getAsJsonArray("images");
-					JsonElement imagesElement = new JsonParser().parse(imagesArray.get(0).toString());
-					JsonObject imagesObject = imagesElement.getAsJsonObject();
-//					System.out.println(name+" images url "+imagesObject.get("url"));
-					 imageUrl = imagesObject.get("url").toString();
+					for (int j = 0; j < imagesArray.size() && found == false; j++) {
+						JsonElement imagesElement = new JsonParser().parse(imagesArray.get(j).toString());
+						JsonObject imagesObject = imagesElement.getAsJsonObject();
+						imageUrl = imagesObject.get("url").toString();
+						if (imageUrl.endsWith("RETINA_LANDSCAPE_16_9.jpg\"")) {
+							found = true;
+						}
+						j++;
+
+					}
+
+					found = false;
+
 					JsonObject datesObject = jobject.getAsJsonObject("dates");
 					JsonObject object = datesObject.getAsJsonObject("start");
 					date = object.get("localDate").toString();
@@ -76,10 +92,19 @@ public class UserService {
 //					("FOUND !!!"+priceArray.size());
 						JsonElement venueElement = new JsonParser().parse(priceArray.get(0).toString());
 						JsonObject venueObject = venueElement.getAsJsonObject();
+						NumberFormat formatter = new DecimalFormat("#0.00"); 
 //					("PRICE "+venueObject.get("min").toString());
-						String minPrice = venueObject.get("min").toString();
-						String maxPrice = venueObject.get("min").toString();
-						price = (Double.parseDouble(minPrice) + Double.parseDouble(maxPrice)) / 2;
+						if (venueObject.has("min")) {
+							minPrice = venueObject.get("min").toString();
+							maxPrice = venueObject.get("max").toString();
+							
+							price = Double.parseDouble(formatter.format((Double.parseDouble(minPrice) + Double.parseDouble(maxPrice)) / 2));
+						}
+						else
+						{
+							price = Double.parseDouble(formatter.format(Double.parseDouble(venueObject.get("max").toString())));
+						}
+						
 					}
 
 					JsonObject newobject = jobject.getAsJsonObject("_embedded");
@@ -90,15 +115,18 @@ public class UserService {
 
 				}
 				if (price != -1) {
-					name=name.replace("\"", "");
-					id=id.replace("\"", "");
-					arena=arena.replace("\"", "");
-					date=date.replace("\"", "");
-					time=time.replace("\"", "");
-					imageUrl=imageUrl.replace("\"", "");
-					
-					//System.out.println("THE NEW NAME "+newName);
-					Event event = new Event(id,arena,name, price, date, time,imageUrl);
+					name = name.replace("\"", "");
+					id = id.replace("\"", "");
+					arena = arena.replace("\"", "");
+					date = date.replace("\"", "");
+					time = time.replace("\"", "");
+					imageUrl = imageUrl.replace("\"", "");
+
+					// System.out.println("THE NEW NAME "+newName);
+					if (name.equals("Eagles")) {
+						System.out.println("\nEagles Image: " + imageUrl);
+					}
+					Event event = new Event(id, arena, name, price, date, time, imageUrl);
 					list.add(event);
 				}
 			}
@@ -116,10 +144,10 @@ public class UserService {
 	}
 
 	public Event getOneEvent(String id) {
-		System.out.println("SIZE OF LIST "+list.size());
-		System.out.println("SIZE OF ID "+id);
+		System.out.println("SIZE OF LIST " + list.size());
+		System.out.println("SIZE OF ID " + id);
 		for (int i = 0; i < list.size(); i++) {
-			System.out.println("COMPARE ID "+id+" list ID "+list.get(i).getId());
+			System.out.println("COMPARE ID " + id + " list ID " + list.get(i).getId());
 			if (list.get(i).getId().equals(id)) {
 				return list.get(i);
 			}

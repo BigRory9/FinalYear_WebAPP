@@ -166,7 +166,7 @@ public class UserController {
 			attr.addFlashAttribute("msg", "Wrong Details");
 			return "redirect:/";
 		} else {
-			userService.createEventArray();
+			userService.createEventArray(0);
 			model.addAttribute("lists", userService.getEventList());
 			session.setAttribute("user", user);
 			for (int i = 0; i < userService.getEventList().size(); i++) {
@@ -202,7 +202,7 @@ public class UserController {
 
 		InputStream is;
 		try {
-			userService.createEventArray();
+			userService.createEventArray(1);
 			User customertype = userService.createCustomer(customer);
 			if (customertype == null) {
 				return "redirect:/";

@@ -84,11 +84,19 @@ public class TicketController {
 //	}
 
 	//deleted model user attribute
-	@RequestMapping(value = "/purchase-tickets", method = RequestMethod.GET)
-	public String purchase(@RequestParam("id") String id, HttpServletResponse httpServletResponse, HttpSession session, Model model) {
-	//	System.out.println(id);
-		model.addAttribute("id", id);
-		return "creditCard";
+//	@RequestMapping(value = "/purchase-tickets", method = RequestMethod.GET)
+//	public String purchase(@RequestParam("id") String id, HttpServletResponse httpServletResponse, HttpSession session, Model model) {
+//	//	System.out.println(id);
+//		model.addAttribute("id", id);
+//		return "creditCard";
+//	}
+	@RequestMapping(value = "/login/{pageNum}", method = RequestMethod.GET)
+	public String next(@RequestParam("pageNum") String pageNum,Model model)
+	{
+		int number = Integer.parseInt(pageNum);
+		System.out.println("The number is "+number);
+		model.addAttribute("lists",userService.createEventArray((number -1)));
+		return "success";
 	}
 
 	//deleted model user attribute
