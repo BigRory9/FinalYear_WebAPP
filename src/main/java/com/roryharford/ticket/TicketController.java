@@ -1,6 +1,10 @@
 package com.roryharford.ticket;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
@@ -47,6 +51,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -83,7 +89,7 @@ public class TicketController {
 //	    return "tickets";
 //	}
 
-	//deleted model user attribute
+	// deleted model user attribute
 //	@RequestMapping(value = "/purchase-tickets", method = RequestMethod.GET)
 //	public String purchase(@RequestParam("id") String id, HttpServletResponse httpServletResponse, HttpSession session, Model model) {
 //	//	System.out.println(id);
@@ -91,18 +97,45 @@ public class TicketController {
 //		return "creditCard";
 //	}
 	@RequestMapping(value = "/login/{pageNum}", method = RequestMethod.GET)
-	public String next(@RequestParam("pageNum") String pageNum,Model model)
-	{
+	public String next(@RequestParam("pageNum") String pageNum, Model model) {
 		int number = Integer.parseInt(pageNum);
-		System.out.println("The number is "+number);
-		model.addAttribute("lists",userService.createEventArray((number -1)));
+		model.addAttribute("lists", userService.createEventArray((number - 1)));
 		return "success";
 	}
 
-	//deleted model user attribute
+	@RequestMapping(value = "/viewTickets", method = RequestMethod.GET)
+	public String viewTickets(Model model, HttpSession session) {
+		User user = (User) session.getAttribute("user");
+		List<Ticket> tickets = user.getTickets();
+		List<Ticket> userTickets = new ArrayList<>();
+		Date todayDate = new Date();
+		for (int i = 0; i < tickets.size(); i++) {
+			try {
+				SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd");
+				String ticketDate = tickets.get(i).getDate();
+				ticketDate = ticketDate.replace("\"", "");
+				Date date = inputFormat.parse(ticketDate);
+				todayDate = inputFormat.parse(inputFormat.format(new Date()));
+				System.out.println(date);
+				System.out.println(todayDate);
+				if (todayDate.before(date) || todayDate.equals(date)) {
+					userTickets.add(tickets.get(i));
+				}
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		model.addAttribute("lists", userTickets);
+		return "usersTickets";
+	}
+
+	// deleted model user attribute
 	@RequestMapping(value = "/purchase-tickets/process", method = RequestMethod.POST)
-	public String process(@RequestParam("id") String id, HttpServletResponse httpServletResponse, HttpSession session, Model model, HttpServletResponse response) throws AuthenticationException,
-			InvalidRequestException, APIConnectionException, CardException, APIException, WriterException, IOException {
+	public String process(@RequestParam("id") String id, HttpServletResponse httpServletResponse, HttpSession session,
+			Model model, HttpServletResponse response) throws AuthenticationException, InvalidRequestException,
+			APIConnectionException, CardException, APIException, WriterException, IOException {
 		System.out.println(id);
 		System.out.println("HELLO");
 		Event event = userService.getOneEvent(id);
@@ -110,10 +143,9 @@ public class TicketController {
 				"vVsj1Kd+iQ0LKyOgSuS5PVM8vJ00fdGMll1jCc6r");
 		AmazonS3 s3Client = AmazonS3Client.builder().withRegion("eu-west-1")
 				.withCredentials(new AWSStaticCredentialsProvider(creds)).build();
-		
+
 		User user = (User) session.getAttribute("user");
 		String imageName = "Image Number " + user.getId();
-		
 
 		// Get a refernce to the image Object
 		S3Object s3object = s3Client.getObject(new GetObjectRequest("tickets-images-fare", imageName));
@@ -124,38 +156,36 @@ public class TicketController {
 		String input = "Event Name: " + event.getDisplayName() + "\n Users Photo "
 				+ s3object.getObjectContent().getHttpRequest().getURI().toString();
 		byte[] bytes = getQRCodeImage(input, 300, 300);
-		
+
 		byte[] encodeBase64 = Base64.encodeBase64(bytes);
 		String base64Encoded = new String(encodeBase64, "UTF-8");
 		// adding QR Code,
 		model.addAttribute("QRcode", base64Encoded);
-		
+
 		System.out.println(imageName);
 		Ticket ticket = new Ticket(event.getDisplayName(), event.getArena(), event.getDate(), event.getPrice(),
-				event.getTime(),base64Encoded.toString());
-		
+				event.getTime(), base64Encoded.toString());
+
 		System.out.println(user.getName());
 		ticketService.createTicket(ticket);
 		user.addTicket(ticket);
 		userService.updateUser(id, user);
-		String name = ticket.getId()+".png";
-		System.out.println("IMAGES NAME: "+name);
-		generateQRCodeImage(input, 300, 300,name);
-		
+		String name = ticket.getId() + ".png";
+		System.out.println("IMAGES NAME: " + name);
+		generateQRCodeImage(input, 300, 300, name);
 
 		model.addAttribute("name", user.getName());
 		model.addAttribute("ticket_id", ticket.getId());
 		model.addAttribute("eventName", event.getDisplayName());
 		Stripe.apiKey = "sk_test_UIcZ6w9lltQi6Vn5VlDCtRk5";
 		Map<String, Object> chargeParams = new HashMap<String, Object>();
-		double price = (event.getPrice()*100);
-		int eventPrice =(int) Math.round(price);
-		chargeParams.put("amount", eventPrice );
+		double price = (event.getPrice() * 100);
+		int eventPrice = (int) Math.round(price);
+		chargeParams.put("amount", eventPrice);
 		chargeParams.put("currency", "eur");
 		chargeParams.put("description", event.getDisplayName());
 		chargeParams.put("source", "tok_amex");
 		Charge.create(chargeParams);
-		
 
 		return "display_ticket";
 	}
@@ -163,7 +193,7 @@ public class TicketController {
 	@RequestMapping(value = "/download-PDF/{ticket-id}", method = RequestMethod.GET)
 	public void downloadPDF(@PathVariable("ticket-id") String id, HttpServletResponse response, HttpSession session) {
 		User user = (User) session.getAttribute("user");
-		Ticket ticket =ticketService.getTicket(Integer.parseInt(id));
+		Ticket ticket = ticketService.getTicket(Integer.parseInt(id));
 		String imageName = "Image Number " + user.getId();
 		BasicAWSCredentials creds = new BasicAWSCredentials("AKIAI5BANVNXM3EHHWMQ",
 				"vVsj1Kd+iQ0LKyOgSuS5PVM8vJ00fdGMll1jCc6r");
@@ -171,10 +201,8 @@ public class TicketController {
 				.withCredentials(new AWSStaticCredentialsProvider(creds)).build();
 		// Get a refernce to the image Object
 		S3Object s3object = s3Client.getObject(new GetObjectRequest("tickets-images-fare", imageName));
-		ticketService.downloadPdf(s3object,ticket,user,response);
-		
-		
-		
+		ticketService.downloadPdf(s3object, ticket, user, response);
+
 	}
 
 	private byte[] getQRCodeImage(String text, int width, int height) throws WriterException, IOException {
@@ -187,14 +215,15 @@ public class TicketController {
 		return pngData;
 	}
 
-	private static void generateQRCodeImage(String text, int width, int height,String name) throws WriterException, IOException {
+	private static void generateQRCodeImage(String text, int width, int height, String name)
+			throws WriterException, IOException {
 		QRCodeWriter qrCodeWriter = new QRCodeWriter();
 		BitMatrix bitMatrix = qrCodeWriter.encode(text, BarcodeFormat.QR_CODE, width, height);
 
 		Path path = FileSystems.getDefault().getPath(
-				"C:\\Users\\roryh\\Documents\\workspace-sts-3.9.6.RELEASE\\login\\src\\main\\webapp\\static\\images\\"+name);
+				"C:\\Users\\roryh\\Documents\\workspace-sts-3.9.6.RELEASE\\login\\src\\main\\webapp\\static\\images\\"
+						+ name);
 		MatrixToImageWriter.writeToPath(bitMatrix, "PNG", path);
 	}
 
-	
 }

@@ -42,7 +42,7 @@
 				<li class="nav-item active"><a class="nav-link" href="#">Home
 						<span class="sr-only">(current)</span>
 				</a></li>
-				<li class="nav-item"><a class="nav-link" href="#">View Your
+				<li class="nav-item"><a class="nav-link" href="/viewTickets">View Your
 						Tickets</a></li>
 				<li class="nav-item"><a class="nav-link" href="#">Account
 						Information</a></li>
