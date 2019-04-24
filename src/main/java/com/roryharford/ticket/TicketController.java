@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
@@ -14,6 +15,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -99,10 +102,28 @@ public class TicketController {
 	@RequestMapping(value = "/login/{pageNum}", method = RequestMethod.GET)
 	public String next(@RequestParam("pageNum") String pageNum, Model model) {
 		int number = Integer.parseInt(pageNum);
-		model.addAttribute("lists", userService.createEventArray((number - 1)));
+		model.addAttribute("lists", ticketService.createEventArray((number - 1)));
 		return "success";
 	}
-
+	
+	@RequestMapping(value = "/searchEvents", method = RequestMethod.GET)
+	public String searchEvents(@RequestParam("keyword") String keyword, Model model, HttpSession session) {
+		System.out.println("You have typed in "+keyword);
+		try {//https://app.ticketmaster.com/discovery/v2/attractions.json?apikey=thlzRyuDZ6IGtUirirhnDPinG0Sgk2Ay&keyword=Machine Gun Kelly
+		System.out.println("Testing Mapping");
+		List<String> listOfIds =ticketService.serchKeyword(keyword);
+//		
+			TimeUnit.SECONDS.sleep(2);
+		for(int i=0;i<listOfIds.size();i++) {
+		ticketService.createEventArray(listOfIds.get(i));
+		}
+		model.addAttribute("lists", ticketService.getEventList());
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block			e.printStackTrace();
+		}
+		return "success";
+	
+	}
 	@RequestMapping(value = "/viewTickets", method = RequestMethod.GET)
 	public String viewTickets(Model model, HttpSession session) {
 		User user = (User) session.getAttribute("user");
@@ -136,19 +157,21 @@ public class TicketController {
 	public String process(@RequestParam("id") String id, HttpServletResponse httpServletResponse, HttpSession session,
 			Model model, HttpServletResponse response) throws AuthenticationException, InvalidRequestException,
 			APIConnectionException, CardException, APIException, WriterException, IOException {
-		System.out.println(id);
+		System.out.println("ID BEING PASSED IN "+id);
 		System.out.println("HELLO");
-		Event event = userService.getOneEvent(id);
-		BasicAWSCredentials creds = new BasicAWSCredentials("AKIAI5BANVNXM3EHHWMQ",
-				"vVsj1Kd+iQ0LKyOgSuS5PVM8vJ00fdGMll1jCc6r");
+		Event event = ticketService.getOneEvent(id);
+		BasicAWSCredentials creds = new BasicAWSCredentials("AKIAJVL5I336SYABBB4A",
+				"I7gmPoB7tY5bUky5GjLsDijZucjLG/8sngV/UZg6");
 		AmazonS3 s3Client = AmazonS3Client.builder().withRegion("eu-west-1")
 				.withCredentials(new AWSStaticCredentialsProvider(creds)).build();
 
-		User user = (User) session.getAttribute("user");
+		System.out.println("HOWDY "+SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = userService.getUserByEmail(auth.getName());
 		String imageName = "Image Number " + user.getId();
 
 		// Get a refernce to the image Object
-		S3Object s3object = s3Client.getObject(new GetObjectRequest("tickets-images-fare", imageName));
+		S3Object s3object = s3Client.getObject(new GetObjectRequest("gigzeaze", imageName));
 
 		// add to a model
 		model.addAttribute("picUrl", s3object.getObjectContent().getHttpRequest().getURI().toString());
@@ -186,22 +209,25 @@ public class TicketController {
 		chargeParams.put("description", event.getDisplayName());
 		chargeParams.put("source", "tok_amex");
 		Charge.create(chargeParams);
+		ticketService.createPdf(s3object, ticket, user, response);
 
 		return "display_ticket";
 	}
 
 	@RequestMapping(value = "/download-PDF/{ticket-id}", method = RequestMethod.GET)
 	public void downloadPDF(@PathVariable("ticket-id") String id, HttpServletResponse response, HttpSession session) {
-		User user = (User) session.getAttribute("user");
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = userService.getUserByEmail(auth.getName());
 		Ticket ticket = ticketService.getTicket(Integer.parseInt(id));
 		String imageName = "Image Number " + user.getId();
-		BasicAWSCredentials creds = new BasicAWSCredentials("AKIAI5BANVNXM3EHHWMQ",
-				"vVsj1Kd+iQ0LKyOgSuS5PVM8vJ00fdGMll1jCc6r");
+		BasicAWSCredentials creds = new BasicAWSCredentials("AKIAJVL5I336SYABBB4A",
+				"I7gmPoB7tY5bUky5GjLsDijZucjLG/8sngV/UZg6");
 		AmazonS3 s3Client = AmazonS3Client.builder().withRegion("eu-west-1")
 				.withCredentials(new AWSStaticCredentialsProvider(creds)).build();
 		// Get a refernce to the image Object
 		S3Object s3object = s3Client.getObject(new GetObjectRequest("tickets-images-fare", imageName));
-		ticketService.downloadPdf(s3object, ticket, user, response);
+		ticketService.showPDF( ticket,  response);
+	//	ticketService.downloadPdf(s3object, ticket, user, response);
 
 	}
 

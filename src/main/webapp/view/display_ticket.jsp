@@ -37,7 +37,7 @@
 	<br>${eventName}
 	<!-- <img src="http://127.0.0.1:127/images/FYPBRAND.png" alt="logo"/>  <br> -->
 	<div style="background-size: 30% 30%;">
-		<img src="http://127.0.0.1:127/images/FYPBRAND.png" alt="logo"
+		<img src="http://127.0.0.1:127/images/logo_2.png" alt="logo"
 			style="position: relative; object-fit: cover; object-position: center; max-height: 300px; max-width: 300px; padding-left: 250px;"
 			align="middle"  /> <br>
 	</div>

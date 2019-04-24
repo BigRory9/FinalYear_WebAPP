@@ -22,7 +22,6 @@ public class Ticket {
 	private String date;
 	private double price;
 	private String time;
-	private String base64Encoded;
 
 	public Ticket() {
 
@@ -56,13 +55,7 @@ public class Ticket {
 		return arena;
 	}
 
-	public String getBase64Encoded() {
-		return base64Encoded;
-	}
 
-	public void setBase64Encoded(String base64Encoded) {
-		this.base64Encoded = base64Encoded;
-	}
 
 	public void setArena(String arena) {
 		this.arena = arena;

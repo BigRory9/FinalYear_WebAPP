@@ -2,11 +2,10 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!doctype html>
 <head>
-<script src="static/js/charge.js"></script>
-<link rel="stylesheet"  href="static/css/style.css" >
-<link href="static/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="static/js/bootstrap.min.js"></script>
-<script src="static/js/jquery.min.js"></script>
+<link rel="stylesheet"  href="http://127.0.0.1:127/css/css/style.css" >
+<link href="http://127.0.0.1:127/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="http://127.0.0.1:127/js/bootstrap.min.js"></script>
+<script src="http://127.0.0.1:127/js/jquery.min.js"></script>
 <title>Welcome to FairTicket</title>
 </head>
 <body>
@@ -24,7 +23,7 @@
 				<div class="row">
 					<div class="col-xs-6">
 						<div class="well">
-							<form id="loginForm" method="POST" action="register" enctype="multipart/form-data">
+							<form  method="POST" action="/register" enctype="multipart/form-data">
 								<div class="form-group">
 									<label for="name" class="control-label">Name</label> <input
 										type="text" name="name" id="name" class="form-control"

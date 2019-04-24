@@ -29,8 +29,11 @@
 </head>
 
 <body class="text-center">
+
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-		<a class="navbar-brand" href="#">Gigz Eaze</a>
+		<a class="navbar-brand" href="http://localhost:8080/homepage"><img
+			src="http://127.0.0.1:127/images/logo_2.png" height="70px" /> Gigz
+			Eaze</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse"
 			data-target="#navbarColor03" aria-controls="navbarColor03"
 			aria-expanded="false" aria-label="Toggle navigation">
@@ -39,16 +42,20 @@
 
 		<div class="collapse navbar-collapse" id="navbarColor03">
 			<ul class="navbar-nav mr-auto">
-				<li class="nav-item active"><a class="nav-link" href="#">Home
-						<span class="sr-only">(current)</span>
+				<li class="nav-item active"><a class="nav-link"
+					href="http://localhost:8080/homepage">Home <span
+						class="sr-only">(current)</span>
 				</a></li>
-				<li class="nav-item"><a class="nav-link" href="/viewTickets">View Your
-						Tickets</a></li>
+				<li class="nav-item"><a class="nav-link" href="/viewTickets">View
+						Your Tickets</a></li>
 				<li class="nav-item"><a class="nav-link" href="#">Account
 						Information</a></li>
+				<li class="nav-item"><a class="nav-link" href="http://localhost:8080/logout">Logout</a></li>
 			</ul>
-			<form class="form-inline my-2 my-lg-0">
-				<input class="form-control mr-sm-2" type="text" placeholder="Search">
+			<form action="/searchEvents" method="GET"
+				class="form-inline my-2 my-lg-0">
+				<input id="keyword" name="keyword" class="form-control mr-sm-2"
+					type="text" placeholder="Search">
 				<button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
 			</form>
 		</div>
@@ -77,9 +84,9 @@
 						<!-- <input name="id"  value ={id}/> -->
 						<script src="https://checkout.stripe.com/checkout.js"
 							class="stripe-button" data-key="pk_test_6ypfwwRrX7SPmxZNpY6Fl49M"
-							data-amount=${list.price } data-name="Gigz Eaze"
+							data-amount= data-name="Gigz Eaze"
 							data-description="Making it simply a better experience"
-							data-image="http://127.0.0.1:127/images/FYPBRAND.png"
+							data-image="http://127.0.0.1:127/images/logo_2.png"
 							data-locale="auto" data-currency="eur">
 							
 						</script>
@@ -95,13 +102,18 @@
 		<ul class="pagination pagination-sm">
 			<li class="page-item disabled"><a class="page-link" href="#">&laquo;</a>
 			</li>
-			<li class="page-item"><a class="page-link" href="<c:url value="${requestScope['javax.servlet.forward.request_uri']}/page"><c:param name="pageNum" value="1"/></c:url>">1</a></li>
+			<li class="page-item"><a class="page-link"
+				href="<c:url value="${requestScope['javax.servlet.forward.request_uri']}/page"><c:param name="pageNum" value="1"/></c:url>">1</a></li>
 			</li>
 			<!-- <p><a href="<c:url value='/purchase-tickets'><c:param name="id" value="${list.id}"/></c:url>">Purchase</a></p> -->
-			<li class="page-item"><a class="page-link" href="<c:url value="/login/page"><c:param name="pageNum" value="2"/></c:url>">2</a></li>
-			<li class="page-item"><a class="page-link" href="<c:url value="/login/page"><c:param name="pageNum" value="3"/></c:url>">3</a></li>
-			<li class="page-item"><a class="page-link" href="<c:url value="/login/page"><c:param name="pageNum" value="4"/></c:url>">4</a></li>
-			<li class="page-item"><a class="page-link" href="<c:url value="/login/page"><c:param name="pageNum" value="5"/></c:url>">5</a></li>
+			<li class="page-item"><a class="page-link"
+				href="<c:url value="/login/page"><c:param name="pageNum" value="2"/></c:url>">2</a></li>
+			<li class="page-item"><a class="page-link"
+				href="<c:url value="/login/page"><c:param name="pageNum" value="3"/></c:url>">3</a></li>
+			<li class="page-item"><a class="page-link"
+				href="<c:url value="/login/page"><c:param name="pageNum" value="4"/></c:url>">4</a></li>
+			<li class="page-item"><a class="page-link"
+				href="<c:url value="/login/page"><c:param name="pageNum" value="5"/></c:url>">5</a></li>
 			<li class="page-item"><a class="page-link" href="#">&raquo;</a>
 			</li>
 		</ul>
