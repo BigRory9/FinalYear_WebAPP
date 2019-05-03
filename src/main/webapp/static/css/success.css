@@ -1,0 +1,153 @@
+html {
+	font-family: 'Montserrat', sans-serif;
+	background-color: #17141F;
+}
+
+.stripe-button-el {
+	display: none
+}
+
+#gig-search {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	background-color: #8845b23e;
+}
+
+.search-result {
+	width: 60%;
+	height: 150px;
+	background-color: white;
+	margin: 1%;
+	padding: 1%;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	border: solid 5px #17141F;
+}
+
+.search-result img {
+	width: 25%;
+	height: 100%;
+	margin-right: 5%;
+}
+
+.search-content {
+	width: 40%;
+	display: flex;
+	flex-direction: column;
+}
+
+.search-info {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.search-info .datetime p {
+	margin: 0;
+}
+
+.pricing-info {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.pricing-info .price {
+	font-size: 20pt;
+	font-weight: 900;
+}
+
+#gig-list {
+	display: flex;
+	flex-direcion: row;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	background-color: #8845b23e;
+}
+
+.gig {
+	width: 20%;
+	background-color: white;
+	margin: 1%;
+	padding: 1%;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	border: solid 5px #17141F;
+}
+
+.gig img {
+	width: 100%;
+	height: 70%;
+}
+
+.artist {
+	font-weight: 900;
+}
+
+.gig .info {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	border-bottom: solid 3px black;
+}
+
+.gig .info .location {
+	margin-top: 5px;
+	font-size: 12pt;
+}
+
+.gig .info .datetime {
+	display: flex;
+	flex-direction: column;
+	font-size: 10pt;
+}
+
+.gig .info .datetime p {
+	margin: 0;
+}
+
+.start {
+	height: 50%;
+	justify-self: flex-start;
+}
+
+.end {
+	display: flex;
+	flex-direction: column;
+	height: 50%
+}
+
+.gig .end .price {
+	align-self: center !important;
+	font-size: 20pt !important;
+	font-weight: 900 !important;
+}
+
+.stripe-button-el {
+	display: none !important;
+	/*   width: 200px;
+ font-family: 'Montserrat', sans-serif;
+  border-radius: 0;
+  background-image: none;
+  background-color: green; */
+}
+
+.purchase-button {
+	background-color: #4CAF50; /* Green */
+	border: none;
+	border-radius: 25px;
+	color: white;
+	padding: 10px;
+	text-decoration: none;
+	font-size: 16px;
+	font-weight: 900;
+	font-family: 'Montserrat', sans-serif;
+}
+
+.purchase-button:hover {
+	background-color: #3c8c40;
+}

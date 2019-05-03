@@ -15,7 +15,7 @@ import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import org.springframework.stereotype.Service;
 
 import com.google.gson.JsonArray;
@@ -23,6 +23,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.roryharford.event.Event;
+import com.roryharford.user.security.BCrypt;
 
 //Starting application starts embedded database apache derby
 @Service
@@ -72,20 +73,17 @@ public class UserService {
 //	}
 
 	public User loginCustomer(String email, String password) {
-		List<User> Customers = this.getAllUsers();
-		User customer = new User();
-		for (int i = 0; i < Customers.size(); i++) {
-			customer = Customers.get(i);
-			if (customer != null && customer.getPassword().equals(password) && customer.getEmail().equals(email)) {
+//		List<User> Customers = this.getAllUsers();
+		User customer = this.getUserByEmail(email);
+			if (customer != null && BCrypt.checkpw(password, customer.getPassword()) && customer.getEmail().equals(email)) {
 				return customer;
 			}
-		}
 		return null;
 	}
 
 	public User createCustomer(User user) {
-		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		user.setPassword(encoder.encode(user.getPassword()));
+//		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+//		user.setPassword(encoder.encode(user.getPassword()));
 		Role userRole = roleRepository.findByRole("USER");
 		user.setActive(1);
 	    user.setRoles(new HashSet<Role>(Arrays.asList(userRole)));

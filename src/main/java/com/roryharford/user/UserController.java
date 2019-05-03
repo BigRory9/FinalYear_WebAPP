@@ -77,6 +77,7 @@ import com.roryharford.event.Event;
 import com.roryharford.ticket.Ticket;
 import com.roryharford.ticket.TicketController;
 import com.roryharford.ticket.TicketService;
+import com.roryharford.user.security.BCrypt;
 
 //will eventually be mapped to Customer
 @Controller
@@ -92,12 +93,29 @@ public class UserController {
 
 	@RequestMapping(value = "/")
 	public String index() {
-
+		String Hello="Hello";
+		System.out.println(Hello);
+		Hello = BCrypt.hashpw(Hello,BCrypt.gensalt());
+		System.out.println(Hello);
+		if(BCrypt.checkpw("Hello", Hello)) {
+			System.out.println("MATCHES!!");
+		}
+		else
+		{
+			System.out.println("DOSENT MATCH");
+		}
 		return "homepage";
 	}
 
 	@RequestMapping(value = "/homepage")
 	public String redirect(Model model) {
+		ticketService.createEventArray(0);
+		model.addAttribute("lists", ticketService.getEventList());
+		return "success";
+	}
+	
+	@RequestMapping(value = "/no")
+	public String loginDidntWork(Model model) {
 		ticketService.createEventArray(0);
 		model.addAttribute("lists", ticketService.getEventList());
 		return "success";
@@ -161,48 +179,38 @@ public class UserController {
 
 	}
 
-	@RequestMapping(value = { "/login" }, method = RequestMethod.GET)
-	public String login() {
-
-		return "homepage";
-	}
-
-//	@PostMapping("/login")
-//	public String verifyCustomer(@ModelAttribute UserLoginDetails CustomerDetails, HttpSession session,
-//			RedirectAttributes attr, final BindingResult binding, Model model) {
-//		// Your code here
+//	@RequestMapping(value = { "/login" }, method = RequestMethod.GET)
+//	public String login(@RequestParam String error) {
+//		System.out.println("HELLLLLLO"+error);
 //		
-//		User user = userService.loginCustomer(CustomerDetails.getInputEmail(), CustomerDetails.getInputPassword());
-//		if (user == null) {
-//			attr.addFlashAttribute("org.springframework.validation.BindingResult.register", binding);
-//			attr.addFlashAttribute("msg", "Wrong Details");
-//			return "redirect:/";
-//		} else {
-//			ticketService.createEventArray(0);
-//			model.addAttribute("lists", ticketService.getEventList());
-//			session.setAttribute("user", user);
-//			System.out.println("HELLO" +user.getId());
-////			for (int i = 0; i < userService.getEventList().size(); i++) {
-////				System.out.println(userService.getEventList().get(i).toString());
-////			}
-//
-////			if (userService.getEventList().size() < 0) {
-////				System.out.println("NO TICKETS");
-////			}
-//			
-//			return "success";
-//		}
+////		if(error.equals("true")) {
+////			return "testing";
+////		}
+//		return "homepage";
 //	}
 
-	@RequestMapping("/logout")
-	public String logoutCustomer(HttpServletRequest request) {
+	@PostMapping("/login")
+	public String verifyCustomer(@ModelAttribute("user") UserLoginDetails CustomerDetails, HttpSession session,
+			RedirectAttributes attr, final BindingResult binding, Model model) {
+		// Your code here
+		System.out.println("VERY IMPORTANT"+CustomerDetails.getInputPassword());
+		User user = userService.loginCustomer(CustomerDetails.getInputEmail(), CustomerDetails.getInputPassword());
+		if (user == null) {
+			attr.addFlashAttribute("org.springframework.validation.BindingResult.register", binding);
+			attr.addFlashAttribute("msg", "Wrong Details");
+			return "redirect:/";
+		} else {
+			ticketService.createEventArray(0);
+			model.addAttribute("lists", ticketService.getEventList());
+			session.setAttribute("user", user);
+		}
 
-		HttpSession session = request.getSession();
-		session.invalidate();
-		return "homepage";
-
-	}
+			
+			return "success";
+		}
 	
+
+
 	
 
 	@PostMapping("/register")
@@ -214,6 +222,7 @@ public class UserController {
 				"I7gmPoB7tY5bUky5GjLsDijZucjLG/8sngV/UZg6");
 		AmazonS3 s3Client = AmazonS3Client.builder().withRegion("eu-west-1")
 				.withCredentials(new AWSStaticCredentialsProvider(creds)).build();
+		user.setPassword(BCrypt.hashpw(user.getPassword(),BCrypt.gensalt()));
 		userService.createCustomer(user);
 		try {
 			is = file.getInputStream();

@@ -15,8 +15,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.DefaultResourceLoader;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -165,9 +164,9 @@ public class TicketController {
 		AmazonS3 s3Client = AmazonS3Client.builder().withRegion("eu-west-1")
 				.withCredentials(new AWSStaticCredentialsProvider(creds)).build();
 
-		System.out.println("HOWDY "+SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		User user = userService.getUserByEmail(auth.getName());
+
+
+		User user = (User) session.getAttribute("user");
 		String imageName = "Image Number " + user.getId();
 
 		// Get a refernce to the image Object
@@ -199,7 +198,7 @@ public class TicketController {
 
 		model.addAttribute("name", user.getName());
 		model.addAttribute("ticket_id", ticket.getId());
-		model.addAttribute("eventName", event.getDisplayName());
+		model.addAttribute("event", event);
 		Stripe.apiKey = "sk_test_UIcZ6w9lltQi6Vn5VlDCtRk5";
 		Map<String, Object> chargeParams = new HashMap<String, Object>();
 		double price = (event.getPrice() * 100);
@@ -216,16 +215,16 @@ public class TicketController {
 
 	@RequestMapping(value = "/download-PDF/{ticket-id}", method = RequestMethod.GET)
 	public void downloadPDF(@PathVariable("ticket-id") String id, HttpServletResponse response, HttpSession session) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		User user = userService.getUserByEmail(auth.getName());
+//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = (User) session.getAttribute("user");
 		Ticket ticket = ticketService.getTicket(Integer.parseInt(id));
 		String imageName = "Image Number " + user.getId();
-		BasicAWSCredentials creds = new BasicAWSCredentials("AKIAJVL5I336SYABBB4A",
-				"I7gmPoB7tY5bUky5GjLsDijZucjLG/8sngV/UZg6");
-		AmazonS3 s3Client = AmazonS3Client.builder().withRegion("eu-west-1")
-				.withCredentials(new AWSStaticCredentialsProvider(creds)).build();
-		// Get a refernce to the image Object
-		S3Object s3object = s3Client.getObject(new GetObjectRequest("tickets-images-fare", imageName));
+//		BasicAWSCredentials creds = new BasicAWSCredentials("AKIAJVL5I336SYABBB4A",
+//				"I7gmPoB7tY5bUky5GjLsDijZucjLG/8sngV/UZg6");
+//		AmazonS3 s3Client = AmazonS3Client.builder().withRegion("eu-west-1")
+//				.withCredentials(new AWSStaticCredentialsProvider(creds)).build();
+//		// Get a refernce to the image Object
+//		S3Object s3object = s3Client.getObject(new GetObjectRequest("tickets-images-fare", imageName));
 		ticketService.showPDF( ticket,  response);
 	//	ticketService.downloadPdf(s3object, ticket, user, response);
 

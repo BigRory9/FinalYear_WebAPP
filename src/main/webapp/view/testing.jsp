@@ -1,34 +1,7 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<!doctype html>
-<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-
-<meta charset="utf-8">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="">
-<meta name="author" content="">
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Cache-Control" content="no-cache">
-<meta http-equiv="Expires" content="sat, 01 Dec 2001 00:00:00 GMT">
-<script src="https://checkout.stripe.com/checkout.js"></script>
-<script type="text/javascript">
-	Stripe.setPublishableKey('pk_test_6ypfwwRrX7SPmxZNpY6Fl49M');
-</script>
-</head>
-
-<title>Homepage</title>
-
-<!-- Bootstrap core CSS -->
-<link
-	href="C:\Users\roryh\Documents\workspace-sts-3.9.6.RELEASE\login\target\classes\static"
-	rel="stylesheet">
-
-<!-- Custom styles for this template -->
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <style type="text/css">
 body {
 	font-family: sans-serif;
@@ -200,7 +173,6 @@ td {
 	}
 }
 </style>
-<link href="http://127.0.0.1:127/css/index.css" rel="stylesheet">
 </head>
 <body>
 	<!-- Start Ticket -->
@@ -210,20 +182,21 @@ td {
 				<td class="first-col">
 					<!-- title -->
 					<div class="ticket-name-div">
-						<span class="ticket-event-longtitle">${event.displayName}</span>
+						<span class="ticket-event-longtitle">Ticket Title</span>
 					</div> <!-- /.ticket-name-div --> <!-- venue details start -->
 					<div class="ticket-event-details">
 						<table>
 							<tr>
 								<td class="first-col">
-									<div class="ticket-info">${event.date}</div> <!-- /.ticket-info -->
+									<div class="ticket-info">January 1st, 2014 to December
+										31th, 2016</div> <!-- /.ticket-info -->
 									<div class="ticket-title">TIME</div> <!-- /.ticket-title -->
-									<div class="ticket-info">${event.time}</div> <!-- /.ticket-info -->
+									<div class="ticket-info">8:00 AM</div> <!-- /.ticket-info -->
 								</td>
 								<!-- /.first-col -->
 								<td class="second-col">
 									<div class="ticket-venue">Place's name</div> <!-- /.ticket-venue -->
-									<div class="ticket-venue">${event.arena}</div> <!-- /.ticket-venue -->
+									<div class="ticket-venue">Street</div> <!-- /.ticket-venue -->
 									<div class="ticket-venue">City, State</div> <!-- /.ticket-venue -->
 								</td>
 								<!-- /.second-col -->
@@ -237,19 +210,19 @@ td {
 									<div class="ticket-title">TICKET #</div> <!-- /.ticket-title -->
 									<div class="ticket-info">0000000001</div> <!-- /.ticket-info -->
 									<div class="ticket-title">PRICE</div> <!-- /.ticket-title -->
-									<div class="ticket-info">€${event.price}</div> <!-- /.ticket-info -->
+									<div class="ticket-info">$00.00</div> <!-- /.ticket-info -->
 								</td>
 								<!-- /.first-col -->
 								<td class="second-col">
 									<div class="ticket-title">TICKET OWNER</div> <!-- /.ticket-title -->
-									<div class="ticket-info">${name}</div> <!-- /.ticket-info -->
+									<div class="ticket-info">John Doe</div> <!-- /.ticket-info -->
 									<div class="ticket-title">TICKET TYPE</div> <!-- /.ticket-title -->
-									<div class="ticket-info">General Access</div> <!-- /.ticket-info -->
+									<div class="ticket-info">Showroom + VIP access</div> <!-- /.ticket-info -->
 								</td>
 								<!-- /.second-col -->
 								<td class="third-col"><a href="#" target="_blank"> <img
 										class="ticket-qr-code"
-										src='data:image/jpeg;base64,${QRcode}' alt="qrcode" />
+										src='http://placehold.it/100x100?text=QR+Code' alt="qrcode" />
 								</a></td>
 								<!-- /.third-col -->
 							</tr>
@@ -257,10 +230,8 @@ td {
 					</div> <!-- /.ticket-ticket-details -->
 				</td>
 				<!-- /.first-col -->
-				<td class="ticket-logo">
-				<img src="${picUrl }" alt="Logo" /><br>
-				<a href="<c:url value="/download-PDF/${ticket_id}" />"  target="_blank" method="POST" novalidate="novalidate">Open as PDF</a>	
-				</td>
+				<td class="ticket-logo"><img
+					src="http://placehold.it/40x190?text=Logo" alt="Logo" /></td>
 				<!-- /.ticket-logo -->
 			</tr>
 		</table>
@@ -269,28 +240,3 @@ td {
 	<!-- /.ticket-wrapper -->
 	<!-- End Ticket -->
 </body>
-<%-- <body class="text-center">
-	<p>Your Ticket ${name}</p>
-	<br>${eventName}
-	<!-- <img src="http://127.0.0.1:127/images/FYPBRAND.png" alt="logo"/>  <br> -->
-	<div style="background-size: 30% 30%;">
-		<img src="http://127.0.0.1:127/images/logo_2.png" alt="logo"
-			style="position: relative; object-fit: cover; object-position: center; max-height: 300px; max-width: 300px; padding-left: 250px;"
-			align="middle"  /> <br>
-	</div>
-
-	<div class="column">
-		<img role="presentation" sizes="100vw" src=${picUrl }
-			style="position: relative; object-fit: cover; object-position: center; max-height: 300px; max-width: 300px">
-	</div>
-	<br>
-	<div class="column">
-		<img src="data:image/jpeg;base64,${QRcode}" align="middle" />
-	</div>
-	<br>
-	<a href="<c:url value="/download-PDF/${ticket_id}" />"  target="_blank" method="POST" novalidate="novalidate">Open as PDF</a>
-	<br>
-	<br>
-
-</body> --%>
-</html>
