@@ -1,4 +1,4 @@
-package com.roryharford.event;
+ package com.roryharford.event;
 
 import java.util.ArrayList;
 
@@ -11,9 +11,11 @@ public class Event {
 	String time;
 	double price;
 	String imageUrl;
+	String latitude;
+	String longitude;
 
 	public Event(String id, String arena, String name, double price, String date, String time,
-			String imageUrl) {
+			String imageUrl,String latitude, String longitude) {
 		super();
 		this.id = id;
 		this.arena = arena;
@@ -22,6 +24,8 @@ public class Event {
 		this.date = date;
 		this.time = time;
 		this.imageUrl = imageUrl;
+		this.latitude = latitude;
+		this.longitude = longitude;
 	}
 
 	public String getImageUrl() {
@@ -35,6 +39,7 @@ public class Event {
 	public double getPrice() {
 		return price;
 	}
+	
 
 	public void setPrice(double price) {
 		this.price = price;
@@ -78,6 +83,32 @@ public class Event {
 
 	public void setTime(String time) {
 		this.time = time;
+	}
+	
+	
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(String latitude) {
+		this.latitude = latitude;
+	}
+
+	public String getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(String longitude) {
+		this.longitude = longitude;
 	}
 
 	@Override

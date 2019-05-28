@@ -48,9 +48,10 @@
 				</a></li>
 				<li class="nav-item"><a class="nav-link" href="/viewTickets">View
 						Your Tickets</a></li>
-				<li class="nav-item"><a class="nav-link" href="#">Account
-						Information</a></li>
-				<li class="nav-item"><a class="nav-link" href="http://localhost:8080/logout">Logout</a></li>
+				<li class="nav-item"><a class="nav-link" href="/createGroup">Create
+						Group</a></li>
+				<li class="nav-item"><a class="nav-link"
+					href="http://localhost:8080/logout">Logout</a></li>
 			</ul>
 			<form action="/searchEvents" method="GET"
 				class="form-inline my-2 my-lg-0">
@@ -60,6 +61,14 @@
 			</form>
 		</div>
 	</nav>
+<%-- 	<form action="list" method="post">
+		Select a Category: <select name="category">
+			<c:forEach items="${groups}" var="group">
+				<option value="${group.id}">${group.displayName}</option>
+			</c:forEach>
+		</select> <br />
+		<br /> <input type="submit" value="Submit" />
+	</form> --%>
 	<%-- <br>Image here: <img src= ${picUrl} />--%>
 	<div id="gig-list">
 		<c:forEach var="list" items="${lists}">
@@ -84,13 +93,20 @@
 						<!-- <input name="id"  value ={id}/> -->
 						<script src="https://checkout.stripe.com/checkout.js"
 							class="stripe-button" data-key="pk_test_6ypfwwRrX7SPmxZNpY6Fl49M"
-							data-amount= data-name="Gigz Eaze"
+							data-amount=data-name= "Gigz
+							Eaze"
 							data-description="Making it simply a better experience"
 							data-image="http://127.0.0.1:127/images/logo_2.png"
 							data-locale="auto" data-currency="eur">
 							
 						</script>
 						<button type="submit" class="purchase-button">Purchase</button>
+					</form>
+
+					<form action="/purchase-tickets-for-group" method="GET">
+						<input type="hidden" name="id" value=${list.id } />
+						<button type="submit" class="purchase-button">Purchase
+							For A Group</button>
 					</form>
 					<!-- 	<button type="submit" class="purchase-button">Purchase</button> -->
 

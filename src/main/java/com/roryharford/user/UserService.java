@@ -45,6 +45,21 @@ public class UserService {
 		customerRepository.findAll().forEach(users::add);
 		return users;
 	}
+	
+	public List<User> getAllUsersForGroup(String email) {
+		// connects to the database and runs a query
+		List<User> allUsers = this.getAllUsers();
+		List<User> users = new ArrayList<>();
+		// adds each User into the array
+		for(int i=0; i<allUsers.size();i++) {
+			if(!allUsers.get(i).getEmail().equals(email))
+			{
+				users.add(allUsers.get(i));
+			}
+			
+		}
+		return users;
+	}
 
 	public User getUser(int id) {
 		// return Users.stream().filter(t -> t.getId().equals(id)).findFirst().get();

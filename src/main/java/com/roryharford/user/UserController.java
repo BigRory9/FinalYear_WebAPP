@@ -93,17 +93,6 @@ public class UserController {
 
 	@RequestMapping(value = "/")
 	public String index() {
-		String Hello="Hello";
-		System.out.println(Hello);
-		Hello = BCrypt.hashpw(Hello,BCrypt.gensalt());
-		System.out.println(Hello);
-		if(BCrypt.checkpw("Hello", Hello)) {
-			System.out.println("MATCHES!!");
-		}
-		else
-		{
-			System.out.println("DOSENT MATCH");
-		}
 		return "homepage";
 	}
 
@@ -113,13 +102,7 @@ public class UserController {
 		model.addAttribute("lists", ticketService.getEventList());
 		return "success";
 	}
-	
-	@RequestMapping(value = "/no")
-	public String loginDidntWork(Model model) {
-		ticketService.createEventArray(0);
-		model.addAttribute("lists", ticketService.getEventList());
-		return "success";
-	}
+
 
 //	@RequestMapping(method = RequestMethod.POST, value = "/upload")
 //	public String handleFIleUpload(@RequestParam("file") MultipartFile file) {
@@ -181,11 +164,6 @@ public class UserController {
 
 //	@RequestMapping(value = { "/login" }, method = RequestMethod.GET)
 //	public String login(@RequestParam String error) {
-//		System.out.println("HELLLLLLO"+error);
-//		
-////		if(error.equals("true")) {
-////			return "testing";
-////		}
 //		return "homepage";
 //	}
 
@@ -243,7 +221,6 @@ public class UserController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println("IN COntroller " + user.getName());
 		
 
 //			String successMessage = "";
@@ -256,70 +233,7 @@ public class UserController {
 
 	}
 
-//	@PostMapping("/register")
-//	public String createUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult) {
-//		// change to their email
-//		User userExists = userService.getUser(user.getId());
-//
-////		if (userExists != null) {
-////			bindingResult.rejectValue("username", "error.user");
-////		}
-////		if (bindingResult.hasErrors()) {
-////			//return to error page
-//////			model.setViewName("user/register");
-//////			String errorMessage = "";
-//////			model.addObject("errorMessage", errorMessage);
-////		} else {
-//		System.out.println("IN COntroller " + user.getName());
-//		userService.createCustomer(user);
-//
-////			String successMessage = "";
-////			model.addObject("successMessage", successMessage);
-////			model.addObject("user", new User());
-////			model.setViewName("user/register");
-//		return "homepage";
-////		}
-//  return null;
 
-//	}
-//	public String registerCustomer(Model model, @ModelAttribute User customer, HttpSession session,
-//			@RequestParam("file") MultipartFile file) {
-//
-//		BasicAWSCredentials creds = new BasicAWSCredentials("AKIAI5BANVNXM3EHHWMQ",
-//				"vVsj1Kd+iQ0LKyOgSuS5PVM8vJ00fdGMll1jCc6r");
-//		AmazonS3 s3Client = AmazonS3Client.builder().withRegion("eu-west-1")
-//				.withCredentials(new AWSStaticCredentialsProvider(creds)).build();
-//
-//		InputStream is;
-//		try {
-//			ticketService.createEventArray(0);
-//			User customertype = userService.createCustomer(customer);
-//			if (customertype == null) {
-//				return "redirect:/";
-//			}
-//
-//			session.setAttribute("customer", customer);
-//			is = file.getInputStream();
-//			// save on s3 wont allow me to save with public read access
-////			tickets-images-fare
-//			String imageName = "Image Number " + customer.getId();
-//			s3Client.putObject(new PutObjectRequest("tickets-images-fare", imageName, is, new ObjectMetadata())
-//					.withCannedAcl(CannedAccessControlList.PublicRead));
-//
-//			// Get a refernce to the image Object
-//			S3Object s3object = s3Client.getObject(new GetObjectRequest("tickets-images-fare", imageName));
-//
-////			//add to a model
-//			model.addAttribute("picUrl", s3object.getObjectContent().getHttpRequest().getURI().toString());
-//
-//			System.out.println(s3object.getObjectContent().getHttpRequest().getURI().toString());
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		return "success";
-//
-//	}
 
 	@RequestMapping("/registerPage")
 	public String showRegister() {

@@ -182,6 +182,7 @@ public class TicketService {
 //			JSONArray entryJSON = responseJson.getJSONArray("priceRanges");
 //			("HEUJDNMK!"+entryJSON.length());
 				String id = "", name = "", arena = "", date = null, time = "";
+				String longitude="", latitude="";
 				double price = -1;
 				String minPrice = "0";
 				String maxPrice = "0";
@@ -261,8 +262,10 @@ public class TicketService {
 						date = date.replace("\"", "");
 						time = time.replace("\"", "");
 						imageUrl = imageUrl.replace("\"", "");
+						latitude = latitude.replace("\"", "");
+						longitude = longitude.replace("\"", "");
 
-						Event event = new Event(id, arena, name, price, date, time, imageUrl);
+						Event event = new Event(id, arena, name, price, date, time, imageUrl,latitude,longitude);
 						list.add(event);
 					}
 				}
@@ -304,6 +307,7 @@ public class TicketService {
 //			JSONArray entryJSON = responseJson.getJSONArray("priceRanges");
 //			("HEUJDNMK!"+entryJSON.length());
 			String id = "", name = "", arena = "", date = null, time = null;
+			String longitude="", latitude="";
 			double price = -1;
 			String minPrice = "0";
 			String maxPrice = "0";
@@ -344,6 +348,7 @@ public class TicketService {
 					JsonObject object = datesObject.getAsJsonObject("start");
 					date = object.get("localDate").toString();
 					time = object.get("localTime").toString();
+					//location
 
 					JsonArray priceArray = jobject.getAsJsonArray("priceRanges");
 					if (priceArray != null) {
@@ -371,7 +376,9 @@ public class TicketService {
 					JsonElement venueElement = new JsonParser().parse(arrayJSON.get(0).toString());
 					JsonObject venueObject = venueElement.getAsJsonObject();
 					arena = venueObject.get("name").toString();
-
+					JsonObject latLong = venueObject.getAsJsonObject("location");
+					longitude = latLong.get("longitude").toString();
+					latitude = latLong.get("latitude").toString();
 				}
 				if (price != -1) {
 					name = name.replace("\"", "");
@@ -380,8 +387,10 @@ public class TicketService {
 					date = date.replace("\"", "");
 					time = time.replace("\"", "");
 					imageUrl = imageUrl.replace("\"", "");
+					latitude = latitude.replace("\"", "");
+					longitude = longitude.replace("\"", "");
 
-					Event event = new Event(id, arena, name, price, date, time, imageUrl);
+					Event event = new Event(id, arena, name, price, date, time, imageUrl,latitude,longitude);
 					list.add(event);
 				}
 			}
@@ -429,6 +438,8 @@ public class TicketService {
 			document.add(image);
 			document.add(new Paragraph("Users Name: " + user.getName()));
 			document.add(new Paragraph("Ticket : " + ticket.getName()));
+			document.add(new Paragraph("Arena : " + ticket.getArena()+"  Date : " + ticket.getDate() ));
+			document.add(new Paragraph("Price : " + ticket.getPrice()));
 			document.add(new Paragraph("       "));
 			PdfPTable table = new PdfPTable(2);
 			table.setWidthPercentage(100);
@@ -461,7 +472,9 @@ public class TicketService {
 			            file.getName(), "text/plain", IOUtils.toByteArray(input));
 			    InputStream is = multipartFile.getInputStream();
 //			    s3Client.putObject("someBucket", "foo/bar1", file1);
-			s3Client.putObject(new PutObjectRequest("gigzeaze","ticket-PDFs/"+pdfName, is, new ObjectMetadata())
+//				s3Client.putObject(new PutObjectRequest("gigzeaze","ticket-PDFs/"+pdfName, is, new ObjectMetadata())
+//				.withCannedAcl(CannedAccessControlList.PublicRead));
+			s3Client.putObject(new PutObjectRequest("gigzeaze",pdfName, is, new ObjectMetadata())
 					.withCannedAcl(CannedAccessControlList.PublicRead));
 
 		} catch (DocumentException e) {
@@ -495,6 +508,8 @@ public class TicketService {
 			e.printStackTrace();
 		}
 	}
+	
+	
 
 	public static PdfPCell createImageCell(com.itextpdf.text.Image img) throws DocumentException, IOException {
 		PdfPCell cell = new PdfPCell(img, true);

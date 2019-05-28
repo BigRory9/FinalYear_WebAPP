@@ -15,24 +15,15 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Cache-Control" content="no-cache">
 <meta http-equiv="Expires" content="sat, 01 Dec 2001 00:00:00 GMT">
-<script src="https://checkout.stripe.com/checkout.js"></script>
-<script type="text/javascript">
-	Stripe.setPublishableKey('pk_test_6ypfwwRrX7SPmxZNpY6Fl49M');
-</script>
 </head>
 
 <title>Homepage</title>
-
-<!-- Bootstrap core CSS -->
-<link
-	href="C:\Users\roryh\Documents\workspace-sts-3.9.6.RELEASE\login\target\classes\static"
-	rel="stylesheet">
 
 <!-- Custom styles for this template -->
 <style type="text/css">
 body {
 	font-family: sans-serif;
-	background-color: #fff;
+	background-color:#E1D1EC;
 	color: #535353;
 	margin: 5px;
 }
@@ -67,6 +58,7 @@ td {
 	border-top: 12px solid rgb(33, 150, 243);
 	margin: 15px auto 0;
 	padding-bottom: 15px;
+	background-color: white;
 	width: 800px;
 }
 
@@ -86,6 +78,7 @@ td {
 	border-left: 2px dashed #ccc;
 	text-align: center;
 	vertical-align: middle;
+	background-color: white;
 }
 
 .ticket-logo img {
@@ -105,6 +98,7 @@ td {
 	font-size: 22px;
 	letter-spacing: -1px;
 	line-height: 22px;
+	background-color: white;
 }
 
 .ticket-event-shorttitle {
@@ -200,9 +194,43 @@ td {
 	}
 }
 </style>
-<link href="http://127.0.0.1:127/css/index.css" rel="stylesheet">
+
+<link href="http://127.0.0.1:127/pulse/bootstrap.min.css"
+	rel="stylesheet">
+
+<link href="http://127.0.0.1:127/css/success.css" rel="stylesheet">
 </head>
 <body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<a class="navbar-brand" href="http://localhost:8080/homepage"><img
+			src="http://127.0.0.1:127/images/logo_2.png" height="70px" /> Gigz
+			Eaze</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse"
+			data-target="#navbarColor03" aria-controls="navbarColor03"
+			aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<div class="collapse navbar-collapse" id="navbarColor03">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item active"><a class="nav-link"
+					href="http://localhost:8080/homepage">Home <span
+						class="sr-only">(current)</span>
+				</a></li>
+				<li class="nav-item"><a class="nav-link" href="/viewTickets">View
+						Your Tickets</a></li>
+				<li class="nav-item"><a class="nav-link" href="#">Account
+						Information</a></li>
+				<li class="nav-item"><a class="nav-link" href="http://localhost:8080/logout">Logout</a></li>
+			</ul>
+			<form action="/searchEvents" method="GET"
+				class="form-inline my-2 my-lg-0">
+				<input id="keyword" name="keyword" class="form-control mr-sm-2"
+					type="text" placeholder="Search">
+				<button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+			</form>
+		</div>
+	</nav>
 	<!-- Start Ticket -->
 	<div class="ticket-wrapper">
 		<table class="ticket-table">
@@ -259,7 +287,7 @@ td {
 				<!-- /.first-col -->
 				<td class="ticket-logo">
 				<img src="${picUrl }" alt="Logo" /><br>
-				<a href="<c:url value="/download-PDF/${ticket_id}" />"  target="_blank" method="POST" novalidate="novalidate">Open as PDF</a>	
+				<a href="<c:url value="/download-PDF/${ticket_id}" />"  target="_blank" method="POST" novalidate="novalidate">Download as PDF</a>	
 				</td>
 				<!-- /.ticket-logo -->
 			</tr>
@@ -269,28 +297,3 @@ td {
 	<!-- /.ticket-wrapper -->
 	<!-- End Ticket -->
 </body>
-<%-- <body class="text-center">
-	<p>Your Ticket ${name}</p>
-	<br>${eventName}
-	<!-- <img src="http://127.0.0.1:127/images/FYPBRAND.png" alt="logo"/>  <br> -->
-	<div style="background-size: 30% 30%;">
-		<img src="http://127.0.0.1:127/images/logo_2.png" alt="logo"
-			style="position: relative; object-fit: cover; object-position: center; max-height: 300px; max-width: 300px; padding-left: 250px;"
-			align="middle"  /> <br>
-	</div>
-
-	<div class="column">
-		<img role="presentation" sizes="100vw" src=${picUrl }
-			style="position: relative; object-fit: cover; object-position: center; max-height: 300px; max-width: 300px">
-	</div>
-	<br>
-	<div class="column">
-		<img src="data:image/jpeg;base64,${QRcode}" align="middle" />
-	</div>
-	<br>
-	<a href="<c:url value="/download-PDF/${ticket_id}" />"  target="_blank" method="POST" novalidate="novalidate">Open as PDF</a>
-	<br>
-	<br>
-
-</body> --%>
-</html>

@@ -84,7 +84,7 @@
 					<form id="downloadPdf" method="GET"
 						action="/download-PDF/${list.id}" novalidate="novalidate"
 						target="_blank">
-						<button class="purchase-button">Open as PDF</button>
+						<button class="purchase-button">Download as PDF</button>
 					</form>
 				</div>
 			</div>

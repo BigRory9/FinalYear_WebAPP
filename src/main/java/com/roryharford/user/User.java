@@ -18,6 +18,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.roryharford.group.Group;
 import com.roryharford.ticket.Ticket;
 
 //Creates Table in DB
@@ -37,6 +38,10 @@ public class User {
 	private String username;
 	private String email;
 	private String password;
+	
+//	@OneToMany
+//	@JoinColumn(name = "user_id")
+//	private List<Group> groups = new ArrayList<>();
 
 	@OneToMany(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id")
@@ -115,6 +120,16 @@ public class User {
 	public Set<Role> getRoles(){
 		return roles;
 	}
+	
+	
+//
+//	public List<Group> getGroups() {
+//		return groups;
+//	}
+//
+//	public void setGroups(List<Group> groups) {
+//		this.groups = groups;
+//	}
 
 	public void setRoles(Set<Role> roles) {
 		// TODO Auto-generated method stub

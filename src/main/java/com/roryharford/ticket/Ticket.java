@@ -22,17 +22,39 @@ public class Ticket {
 	private String date;
 	private double price;
 	private String time;
+	private String latitude;
+	private String longitude;
 
 	public Ticket() {
 
 	}
 
-	public Ticket(String name, String arena, String date, double price, String time, String base64Encoded) {
+	public Ticket(String name, String arena, String date, double price, String time, String longitude,String latitude) {
 		this.name = name;
 		this.arena = arena;
 		this.date = date;
 		this.price = price;
 		this.time = time;
+		this.longitude= longitude;
+		this.latitude = latitude;
+	}
+	
+	
+
+	public String getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(String latitude) {
+		this.latitude = latitude;
+	}
+
+	public String getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(String longitude) {
+		this.longitude = longitude;
 	}
 
 	public int getId() {
