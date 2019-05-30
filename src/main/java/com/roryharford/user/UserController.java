@@ -190,7 +190,6 @@ public class UserController {
 	public String createUser(Model model, @Valid @ModelAttribute("user") User user, BindingResult bindingResult,
 			@RequestParam("file") MultipartFile file,RedirectAttributes attr, final BindingResult binding) {
 		if(file.isEmpty()) {
-			System.out.println("ERROR NO FILE");
 		model.addAttribute("msg", "ERROR! You must upload a photo");
 			return "register";
 		}
