@@ -45,13 +45,12 @@
 					href="http://localhost:8080/homepage">Home <span
 						class="sr-only">(current)</span>
 				</a></li>
-				<li class="nav-item active"><a class="nav-link"
-					href="/viewTickets">View Your Tickets</a></li>
-				<li class="nav-item"><a class="nav-link" href="#">Account
-						Information</a></li>
+				<li class="nav-item active"><a class="nav-link" href="/viewTickets">View
+						Your Tickets</a></li>
+				<li class="nav-item"><a class="nav-link" href="/createGroup">Create
+						Group</a></li>
 				<li class="nav-item"><a class="nav-link"
 					href="http://localhost:8080/logout">Logout</a></li>
-			</ul>
 			</ul>
 			<form action="/searchEvents" method="GET"
 				class="form-inline my-2 my-lg-0">

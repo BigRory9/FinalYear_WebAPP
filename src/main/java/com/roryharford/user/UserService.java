@@ -33,9 +33,7 @@ public class UserService {
 	@Autowired
 	private UserRepository customerRepository;
 	
-	@Autowired
-	private RoleRepository roleRepository;
-
+	
 	private ArrayList<Event> list = new ArrayList<Event>();
 
 	public List<User> getAllUsers() {
@@ -88,7 +86,6 @@ public class UserService {
 //	}
 
 	public User loginCustomer(String email, String password) {
-//		List<User> Customers = this.getAllUsers();
 		User customer = this.getUserByEmail(email);
 			if (customer != null && BCrypt.checkpw(password, customer.getPassword()) && customer.getEmail().equals(email)) {
 				return customer;
@@ -99,9 +96,7 @@ public class UserService {
 	public User createCustomer(User user) {
 //		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 //		user.setPassword(encoder.encode(user.getPassword()));
-		Role userRole = roleRepository.findByRole("USER");
-		user.setActive(1);
-	    user.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
+	
 		System.out.println(user.getName());
 		this.addUser(user);
 		return user;

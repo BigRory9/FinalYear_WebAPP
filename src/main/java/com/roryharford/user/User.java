@@ -27,9 +27,7 @@ import com.roryharford.ticket.Ticket;
 public class User {
 
 	
-	@ManyToMany(cascade = CascadeType.ALL)
-	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-	private Set<Role> roles;
+	
 	// Marks Id as Primary key
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -117,9 +115,7 @@ public class User {
 	public void setTickets(List<Ticket> tickets) {
 		this.tickets = tickets;
 	}
-	public Set<Role> getRoles(){
-		return roles;
-	}
+	
 	
 	
 //
@@ -131,9 +127,6 @@ public class User {
 //		this.groups = groups;
 //	}
 
-	public void setRoles(Set<Role> roles) {
-		// TODO Auto-generated method stub
-		this.roles = roles;
-	}
+	
 
 }

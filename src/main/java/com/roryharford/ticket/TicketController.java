@@ -120,19 +120,15 @@ public class TicketController {
 
 	@RequestMapping(value = "/searchEvents", method = RequestMethod.GET)
 	public String searchEvents(@RequestParam("keyword") String keyword, Model model, HttpSession session) {
-		System.out.println("You have typed in " + keyword);
-		try {// https://app.ticketmaster.com/discovery/v2/attractions.json?apikey=thlzRyuDZ6IGtUirirhnDPinG0Sgk2Ay&keyword=Machine
-				// Gun Kelly
+		try {
 			System.out.println("Testing Mapping");
-			List<String> listOfIds = ticketService.serchKeyword(keyword);
-//		
-			TimeUnit.SECONDS.sleep(2);
+			List<String> listOfIds = ticketService.serchKeyword(keyword);	
+			TimeUnit.SECONDS.sleep(1);
 			for (int i = 0; i < listOfIds.size(); i++) {
 				ticketService.createEventArray(listOfIds.get(i));
 			}
 			model.addAttribute("lists", ticketService.getEventList());
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block e.printStackTrace();
 		}
 		return "success";
 

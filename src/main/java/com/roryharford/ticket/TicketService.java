@@ -116,7 +116,6 @@ public class TicketService {
 //		return null;
 //	}
 	public List<String> serchKeyword(String keyword) {
-//		List list = new ArrayList<Event>();
 		String id = "";
 		list = new ArrayList<Event>();
 		ArrayList<String> keywordList = new ArrayList<String>();
@@ -128,22 +127,10 @@ public class TicketService {
 			JSONObject obj = new JSONObject(json);
 			JSONObject responseJson = obj.getJSONObject("_embedded");
 
-//			("IMPORTANT "+responseJson.length());
-//			JSONObject feedjson = responseJson.getJSONObject("events);
 			JSONArray entriesJSON = responseJson.getJSONArray("attractions");
 			for (int i = 0; i < entriesJSON.length(); i++) {
-//				 if(entriesJSON.get(i).equals("country")) {
-//				 ("\n"+entriesJSON.get(i));
-//				(i);
-
-				// gson
 				JsonElement jelement = new JsonParser().parse(entriesJSON.get(i).toString());
-
-//				JsonElement element = new JsonParser().parse(entryJSON.get(i).toString());
-
-//				("HAY0"+jelement);
 				JsonObject jobject = jelement.getAsJsonObject();
-
 				if (!jobject.get("id").equals(null)) {
 
 					id = jobject.get("id").toString();
@@ -152,10 +139,7 @@ public class TicketService {
 					keywordList.add(id);
 				}
 			}
-//			JSONArray entryJSON = responseJson.getJSONArray("priceRanges");
-//			("HEUJDNMK!"+entryJSON.length());
 
-			System.out.println("ATTEMPTING TO SEARCH " + keyword);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -173,32 +157,18 @@ public class TicketService {
 					+ "&countryCode=IE&apikey=thlzRyuDZ6IGtUirirhnDPinG0Sgk2Ay";
 			String json = Jsoup.connect(url).ignoreContentType(true).execute().body();
 			JSONObject obj = new JSONObject(json);
-			// check if the string contains -embedded
 			if (obj.toString().contains("_embedded")) {
 				JSONObject responseJson = obj.getJSONObject("_embedded");
-//			("IMPORTANT "+responseJson.length());
-//			JSONObject feedjson = responseJson.getJSONObject("events);
 				JSONArray entriesJSON = responseJson.getJSONArray("events");
-//			JSONArray entryJSON = responseJson.getJSONArray("priceRanges");
-//			("HEUJDNMK!"+entryJSON.length());
 				String id = "", name = "", arena = "", date = null, time = "";
-				String longitude="", latitude="";
+				String longitude = "", latitude = "";
 				double price = -1;
 				String minPrice = "0";
 				String maxPrice = "0";
 				String imageUrl = "";
 				boolean found = false;
 				for (int i = 0; i < entriesJSON.length(); i++) {
-//				 if(entriesJSON.get(i).equals("country")) {
-//				 ("\n"+entriesJSON.get(i));
-//				(i);
-
-					// gson
 					JsonElement jelement = new JsonParser().parse(entriesJSON.get(i).toString());
-
-//				JsonElement element = new JsonParser().parse(entryJSON.get(i).toString());
-
-//				("HAY0"+jelement);
 					JsonObject jobject = jelement.getAsJsonObject();
 					System.out.println("ENTERED");
 					if (!jobject.get("name").equals(null)) {
@@ -230,11 +200,9 @@ public class TicketService {
 						JsonArray priceArray = jobject.getAsJsonArray("priceRanges");
 						if (priceArray != null) {
 
-//					("FOUND !!!"+priceArray.size());
 							JsonElement venueElement = new JsonParser().parse(priceArray.get(0).toString());
 							JsonObject venueObject = venueElement.getAsJsonObject();
 							NumberFormat formatter = new DecimalFormat("#0.00");
-//					("PRICE "+venueObject.get("min").toString());
 							if (venueObject.has("min")) {
 								minPrice = venueObject.get("min").toString();
 								maxPrice = venueObject.get("max").toString();
@@ -265,7 +233,7 @@ public class TicketService {
 						latitude = latitude.replace("\"", "");
 						longitude = longitude.replace("\"", "");
 
-						Event event = new Event(id, arena, name, price, date, time, imageUrl,latitude,longitude);
+						Event event = new Event(id, arena, name, price, date, time, imageUrl, latitude, longitude);
 						list.add(event);
 					}
 				}
@@ -307,7 +275,7 @@ public class TicketService {
 //			JSONArray entryJSON = responseJson.getJSONArray("priceRanges");
 //			("HEUJDNMK!"+entryJSON.length());
 			String id = "", name = "", arena = "", date = null, time = null;
-			String longitude="", latitude="";
+			String longitude = "", latitude = "";
 			double price = -1;
 			String minPrice = "0";
 			String maxPrice = "0";
@@ -348,7 +316,7 @@ public class TicketService {
 					JsonObject object = datesObject.getAsJsonObject("start");
 					date = object.get("localDate").toString();
 					time = object.get("localTime").toString();
-					//location
+					// location
 
 					JsonArray priceArray = jobject.getAsJsonArray("priceRanges");
 					if (priceArray != null) {
@@ -390,7 +358,7 @@ public class TicketService {
 					latitude = latitude.replace("\"", "");
 					longitude = longitude.replace("\"", "");
 
-					Event event = new Event(id, arena, name, price, date, time, imageUrl,latitude,longitude);
+					Event event = new Event(id, arena, name, price, date, time, imageUrl, latitude, longitude);
 					list.add(event);
 				}
 			}
@@ -438,7 +406,7 @@ public class TicketService {
 			document.add(image);
 			document.add(new Paragraph("Users Name: " + user.getName()));
 			document.add(new Paragraph("Ticket : " + ticket.getName()));
-			document.add(new Paragraph("Arena : " + ticket.getArena()+"  Date : " + ticket.getDate() ));
+			document.add(new Paragraph("Arena : " + ticket.getArena() + "  Date : " + ticket.getDate()));
 			document.add(new Paragraph("Price : " + ticket.getPrice()));
 			document.add(new Paragraph("       "));
 			PdfPTable table = new PdfPTable(2);
@@ -462,19 +430,18 @@ public class TicketService {
 			AmazonS3 s3Client = AmazonS3Client.builder().withRegion("eu-west-1")
 					.withCredentials(new AWSStaticCredentialsProvider(creds)).build();
 
-			
 			File file = new File(
 					"C:\\Users\\roryh\\Documents\\workspace-sts-3.9.6.RELEASE\\login\\src\\main\\webapp\\static\\images\\"
 							+ pdfName);
-			
-			 FileInputStream input = new FileInputStream(file);
-			    MultipartFile multipartFile = new MockMultipartFile("file",
-			            file.getName(), "text/plain", IOUtils.toByteArray(input));
-			    InputStream is = multipartFile.getInputStream();
+
+			FileInputStream input = new FileInputStream(file);
+			MultipartFile multipartFile = new MockMultipartFile("file", file.getName(), "text/plain",
+					IOUtils.toByteArray(input));
+			InputStream is = multipartFile.getInputStream();
 //			    s3Client.putObject("someBucket", "foo/bar1", file1);
 //				s3Client.putObject(new PutObjectRequest("gigzeaze","ticket-PDFs/"+pdfName, is, new ObjectMetadata())
 //				.withCannedAcl(CannedAccessControlList.PublicRead));
-			s3Client.putObject(new PutObjectRequest("gigzeaze",pdfName, is, new ObjectMetadata())
+			s3Client.putObject(new PutObjectRequest("gigzeaze", pdfName, is, new ObjectMetadata())
 					.withCannedAcl(CannedAccessControlList.PublicRead));
 
 		} catch (DocumentException e) {
@@ -508,8 +475,6 @@ public class TicketService {
 			e.printStackTrace();
 		}
 	}
-	
-	
 
 	public static PdfPCell createImageCell(com.itextpdf.text.Image img) throws DocumentException, IOException {
 		PdfPCell cell = new PdfPCell(img, true);

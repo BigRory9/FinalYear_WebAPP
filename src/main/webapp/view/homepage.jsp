@@ -9,18 +9,17 @@
 	id="bootstrap-css"></script>
 <title>Welcome to FairTicket</title>
 </head>
-<body>
+<body background="http://127.0.0.1:127/images/Concert3.jpg">
 
 	<!------ Include the above in your HEAD tag ---------->
 	<!--  Brand Logo: <img src="http://127.0.0.1:127/images/FYPBRAND.png" alt="logo"/>  <br>  -->
-	 Hello ${customer.name}
 	<div id="login-overlay" class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">
 					<span aria-hidden="true">×</span><span class="sr-only">Close</span>
 				</button>
-				<h4 class="modal-title" id="myModalLabel">Login to TicketFare</h4>
+				<h4 class="modal-title" id="myModalLabel">Login to GigzEaze</h4>
 			</div>
 			<div class="modal-body">
 				<div class="row">
@@ -45,7 +44,7 @@
 									<span class="help-block"></span>
 								</div>
 								<div id="loginErrorMsg" class="alert alert-error hide">Wrong
-									inputEmail og inputPassword</div>
+									Email or Password Try Again!!</div>
 								<button type="submit" class="btn btn-success btn-block">Login</button>
 							</form>
 						</div>
@@ -63,7 +62,7 @@
 								favorites Acts</li>
 							<li><span class="fa fa-check text-success"></span> Fast
 								checkout</li>
-							<li><a href="/read-more/"><u>Read more</u></a></li>
+							
 						</ul>
 						<form method="POST" action="registerPage">
 							<button class="btn btn-info btn-block" name="register"

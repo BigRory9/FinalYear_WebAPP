@@ -24,7 +24,7 @@
 body {
 	font-family: sans-serif;
 	background-color:#E1D1EC;
-	color: #535353;
+	color: #E1D1EC !important;
 	margin: 5px;
 }
 
@@ -252,7 +252,6 @@ td {
 								<td class="second-col">
 									<div class="ticket-venue">Place's name</div> <!-- /.ticket-venue -->
 									<div class="ticket-venue">${event.arena}</div> <!-- /.ticket-venue -->
-									<div class="ticket-venue">City, State</div> <!-- /.ticket-venue -->
 								</td>
 								<!-- /.second-col -->
 							</tr>
@@ -263,7 +262,6 @@ td {
 							<tr>
 								<td class="first-col">
 									<div class="ticket-title">TICKET #</div> <!-- /.ticket-title -->
-									<div class="ticket-info">0000000001</div> <!-- /.ticket-info -->
 									<div class="ticket-title">PRICE</div> <!-- /.ticket-title -->
 									<div class="ticket-info">€${event.price}</div> <!-- /.ticket-info -->
 								</td>

@@ -103,7 +103,6 @@ public class UserController {
 		return "success";
 	}
 
-
 //	@RequestMapping(method = RequestMethod.POST, value = "/upload")
 //	public String handleFIleUpload(@RequestParam("file") MultipartFile file) {
 //		BasicAWSCredentials creds = new BasicAWSCredentials("AKIAITAEL7BGCI2WOZMA",
@@ -162,16 +161,17 @@ public class UserController {
 
 	}
 
-//	@RequestMapping(value = { "/login" }, method = RequestMethod.GET)
-//	public String login(@RequestParam String error) {
-//		return "homepage";
-//	}
+	@RequestMapping(value = { "/logout" }, method = RequestMethod.GET)
+	public String login(HttpSession session) {
+		session.setAttribute("user", null);
+		return "homepage";
+	}
 
 	@PostMapping("/login")
 	public String verifyCustomer(@ModelAttribute("user") UserLoginDetails CustomerDetails, HttpSession session,
 			RedirectAttributes attr, final BindingResult binding, Model model) {
 		// Your code here
-		System.out.println("VERY IMPORTANT"+CustomerDetails.getInputPassword());
+		System.out.println("VERY IMPORTANT" + CustomerDetails.getInputPassword());
 		User user = userService.loginCustomer(CustomerDetails.getInputEmail(), CustomerDetails.getInputPassword());
 		if (user == null) {
 			attr.addFlashAttribute("org.springframework.validation.BindingResult.register", binding);
@@ -183,24 +183,24 @@ public class UserController {
 			session.setAttribute("user", user);
 		}
 
-			
-			return "success";
-		}
-	
-
-
-	
+		return "success";
+	}
 
 	@PostMapping("/register")
-	public String createUser(Model model,@Valid @ModelAttribute("user") User user, BindingResult bindingResult,@RequestParam("file") MultipartFile file) {
-		// change to their email
-		//User userExists = userService.getUser(user.getId());
+	public String createUser(Model model, @Valid @ModelAttribute("user") User user, BindingResult bindingResult,
+			@RequestParam("file") MultipartFile file,RedirectAttributes attr, final BindingResult binding) {
+		if(file.isEmpty()) {
+			System.out.println("ERROR NO FILE");
+		model.addAttribute("msg", "ERROR! You must upload a photo");
+			return "register";
+		}
+		
 		InputStream is;
 		BasicAWSCredentials creds = new BasicAWSCredentials("AKIAJVL5I336SYABBB4A",
 				"I7gmPoB7tY5bUky5GjLsDijZucjLG/8sngV/UZg6");
 		AmazonS3 s3Client = AmazonS3Client.builder().withRegion("eu-west-1")
 				.withCredentials(new AWSStaticCredentialsProvider(creds)).build();
-		user.setPassword(BCrypt.hashpw(user.getPassword(),BCrypt.gensalt()));
+		user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
 		userService.createCustomer(user);
 		try {
 			is = file.getInputStream();
@@ -215,13 +215,10 @@ public class UserController {
 
 //		//add to a model
 			model.addAttribute("picUrl", s3object.getObjectContent().getHttpRequest().getURI().toString());
-
-			System.out.println(s3object.getObjectContent().getHttpRequest().getURI().toString());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 
 //			String successMessage = "";
 //			model.addObject("successMessage", successMessage);
@@ -232,8 +229,6 @@ public class UserController {
 //  return null;
 
 	}
-
-
 
 	@RequestMapping("/registerPage")
 	public String showRegister() {
