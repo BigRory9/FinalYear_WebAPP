@@ -49,7 +49,7 @@ public class User {
 
 	}
 
-	public User(String name, String email, String password,int active) {
+	public User(String name, String email, String password) {
 		super();
 		this.username = name;
 		this.email = email;

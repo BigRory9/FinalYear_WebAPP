@@ -173,6 +173,7 @@ public class UserController {
 		// Your code here
 		System.out.println("VERY IMPORTANT" + CustomerDetails.getInputPassword());
 		User user = userService.loginCustomer(CustomerDetails.getInputEmail(), CustomerDetails.getInputPassword());
+
 		if (user == null) {
 			attr.addFlashAttribute("org.springframework.validation.BindingResult.register", binding);
 			attr.addFlashAttribute("msg", "Wrong Details");
@@ -188,42 +189,57 @@ public class UserController {
 
 	@PostMapping("/register")
 	public String createUser(Model model, @Valid @ModelAttribute("user") User user, BindingResult bindingResult,
-			@RequestParam("file") MultipartFile file,RedirectAttributes attr, final BindingResult binding) {
-		if(file.isEmpty()) {
-		model.addAttribute("msg", "ERROR! You must upload a photo");
+			@RequestParam("file") MultipartFile file, HttpServletRequest request, final BindingResult binding,
+			HttpSession session) {
+		if (file.isEmpty()) {
+			request.setAttribute("msg", "ERROR! You must upload a photo");
 			return "register";
 		}
-		
-		InputStream is;
-		BasicAWSCredentials creds = new BasicAWSCredentials("AKIAJVL5I336SYABBB4A",
-				"I7gmPoB7tY5bUky5GjLsDijZucjLG/8sngV/UZg6");
-		AmazonS3 s3Client = AmazonS3Client.builder().withRegion("eu-west-1")
-				.withCredentials(new AWSStaticCredentialsProvider(creds)).build();
-		user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
-		userService.createCustomer(user);
-		try {
-			is = file.getInputStream();
-			// save on s3 wont allow me to save with public read access
-//		tickets-images-fare
-			String imageName = "Image Number " + user.getId();
-			s3Client.putObject(new PutObjectRequest("gigzeaze", imageName, is, new ObjectMetadata())
-					.withCannedAcl(CannedAccessControlList.PublicRead));
+		if (userService.getUserByEmail(user.getEmail()) == null) {
 
-			// Get a refernce to the image Object
-			S3Object s3object = s3Client.getObject(new GetObjectRequest("gigzeaze", imageName));
+			if (userService.getUserByUsername(user.getName()) == null) {
+
+				InputStream is;
+				BasicAWSCredentials creds = new BasicAWSCredentials("AKIAJVL5I336SYABBB4A",
+						"I7gmPoB7tY5bUky5GjLsDijZucjLG/8sngV/UZg6");
+				AmazonS3 s3Client = AmazonS3Client.builder().withRegion("eu-west-1")
+						.withCredentials(new AWSStaticCredentialsProvider(creds)).build();
+				user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
+				userService.createCustomer(user);
+				try {
+					is = file.getInputStream();
+					// save on s3 wont allow me to save with public read access
+//		tickets-images-fare
+					String imageName = "Image Number " + user.getId();
+					s3Client.putObject(new PutObjectRequest("gigzeaze", imageName, is, new ObjectMetadata())
+							.withCannedAcl(CannedAccessControlList.PublicRead));
+
+					// Get a refernce to the image Object
+					S3Object s3object = s3Client.getObject(new GetObjectRequest("gigzeaze", imageName));
 
 //		//add to a model
-			model.addAttribute("picUrl", s3object.getObjectContent().getHttpRequest().getURI().toString());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+					model.addAttribute("picUrl", s3object.getObjectContent().getHttpRequest().getURI().toString());
+
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			else
+			{
+				model.addAttribute("msg", "ERROR! Username is taken");
+				return "register";
+			}
+		} else {
+
+			model.addAttribute("msg", "ERROR! Email already exists");
+			return "register";
 		}
 
-//			String successMessage = "";
-//			model.addObject("successMessage", successMessage);
-//			model.addObject("user", new User());
-//			model.setViewName("user/register");
-		return "homepage";
+		ticketService.createEventArray(0);
+		model.addAttribute("lists", ticketService.getEventList());
+		session.setAttribute("user", user);
+		return "success";
 //		}
 //  return null;
 

@@ -107,6 +107,11 @@ public class UserService {
 		return customerRepository.findUserByEmail(email);
 		
 	}
+	
+	public User getUserByUsername(String username) {
+		return customerRepository.findUserByUsername(username);
+		
+	}
 
 //	public void createUser(User user) {
 //		user.setPassword(encoder.encode(user.getPassword())); 
