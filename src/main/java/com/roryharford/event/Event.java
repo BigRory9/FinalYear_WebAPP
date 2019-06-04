@@ -4,15 +4,15 @@ import java.util.ArrayList;
 
 public class Event {
 
-	String id;
-	String arena;
-	String name;
-	String date;
-	String time;
-	double price;
-	String imageUrl;
-	String latitude;
-	String longitude;
+	private String id;
+	private String arena;
+	private String name;
+	private String date;
+	private String time;
+	private double price;
+	private String imageUrl;
+	private String latitude;
+	private String longitude;
 
 	public Event(String id, String arena, String name, double price, String date, String time,
 			String imageUrl,String latitude, String longitude) {

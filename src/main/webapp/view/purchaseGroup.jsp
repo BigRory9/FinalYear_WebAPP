@@ -24,7 +24,7 @@
 	rel="stylesheet">
 
 <!-- Custom styles for this template -->
-<link href="http://127.0.0.1:127/css/success.css" rel="stylesheet">
+<link href="http://127.0.0.1:127/css/home.css" rel="stylesheet">
 
 </head>
 

@@ -30,16 +30,12 @@ public class User {
 	
 	// Marks Id as Primary key
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
-	private int active;
 	private String username;
 	private String email;
 	private String password;
 	
-//	@OneToMany
-//	@JoinColumn(name = "user_id")
-//	private List<Group> groups = new ArrayList<>();
 
 	@OneToMany(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id")
@@ -56,13 +52,6 @@ public class User {
 		this.password = password;
 	}
 
-	public int getActive() {
-		return active;
-	}
-
-	public void setActive(int active) {
-		this.active = active;
-	}
 
 	public String getUsername() {
 		return username;
@@ -115,18 +104,6 @@ public class User {
 	public void setTickets(List<Ticket> tickets) {
 		this.tickets = tickets;
 	}
-	
-	
-	
-//
-//	public List<Group> getGroups() {
-//		return groups;
-//	}
-//
-//	public void setGroups(List<Group> groups) {
-//		this.groups = groups;
-//	}
-
 	
 
 }

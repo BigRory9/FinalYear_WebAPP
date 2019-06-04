@@ -23,7 +23,7 @@
 <style type="text/css">
 body {
 	font-family: sans-serif;
-	background-color:#E1D1EC;
+	background-color:#E1D1EC !important;
 	color: #E1D1EC !important;
 	margin: 5px;
 }
@@ -213,14 +213,14 @@ td {
 
 		<div class="collapse navbar-collapse" id="navbarColor03">
 			<ul class="navbar-nav mr-auto">
-				<li class="nav-item active"><a class="nav-link"
+				<li class="nav-item"><a class="nav-link"
 					href="http://localhost:8080/homepage">Home <span
 						class="sr-only">(current)</span>
 				</a></li>
 				<li class="nav-item"><a class="nav-link" href="/viewTickets">View
 						Your Tickets</a></li>
-				<li class="nav-item"><a class="nav-link" href="#">Account
-						Information</a></li>
+				<li class="nav-item"><a class="nav-link" href="/createGroup">Create
+						Group</a></li>
 				<li class="nav-item"><a class="nav-link" href="http://localhost:8080/logout">Logout</a></li>
 			</ul>
 			<form action="/searchEvents" method="GET"

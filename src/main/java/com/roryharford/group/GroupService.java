@@ -29,11 +29,6 @@ public class GroupService {
 		return groups;
 	}
 	
-//	public User getUserByEmail(String email) {
-//		// return Users.stream().filter(t -> t.getId().equals(id)).findFirst().get();
-//		// It knows the id is a String because we set it in the User class
-//		return customerRepository.getOne(email);
-//	}
 	public List<Group> getAllUsersGroups(int id) {
 		List<Group> groups = new ArrayList<>();
 		for(int i=0;i<this.getAllGroups().size();i++) {

@@ -15,8 +15,8 @@ html {
 }
 
 .search-result {
-	width: 60%;
-	height: 150px;
+	width: 80%;
+	height: 250px;
 	background-color: white;
 	margin: 1%;
 	padding: 1%;
@@ -55,6 +55,7 @@ html {
 	align-items: center;
 }
 
+
 .pricing-info .price {
 	font-size: 20pt;
 	font-weight: 900;
@@ -86,6 +87,7 @@ html {
 
 .artist {
 	font-weight: 900;
+	font-size: 23pt;
 }
 
 .gig .info {
@@ -138,6 +140,18 @@ html {
 
 .purchase-button {
 	background-color: #4CAF50; /* Green */
+	border: none;
+	border-radius: 25px;
+	color: white;
+	padding: 10px;
+	text-decoration: none;
+	font-size: 16px;
+	font-weight: 900;
+	font-family: 'Montserrat', sans-serif;
+}
+
+.remove-group {
+	background-color: red; /* Red */
 	border: none;
 	border-radius: 25px;
 	color: white;

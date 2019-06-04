@@ -1,5 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!doctype html>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <html lang="en">
@@ -47,8 +49,8 @@
 				</a></li>
 				<li class="nav-item"><a class="nav-link" href="/viewTickets">View
 						Your Tickets</a></li>
-				<li class="nav-item active"><a class="nav-link" href="/createGroup">Create
-						Group</a></li>
+				<li class="nav-item active"><a class="nav-link"
+					href="/createGroup">Create Group</a></li>
 				<li class="nav-item"><a class="nav-link"
 					href="http://localhost:8080/logout">Logout</a></li>
 			</ul>
@@ -62,7 +64,7 @@
 	</nav>
 	<%-- <br>Image here: <img src= ${picUrl} />--%>
 	<div id="gig-search">
-		
+
 		<c:forEach var="list" items="${lists}">
 			<div class="search-result">
 				<img
@@ -71,8 +73,9 @@
 
 				<div class="search-content">
 					Username
-					<p class="artist">${list.username}<p>
-					<%-- <div class="search-info">
+					<p class="artist">${list.username}
+					<p>
+						<%-- <div class="search-info">
 						<p class="location"></p>
 						<div class="datetime">
 							<p class="date">${list.date}</p>
@@ -80,24 +83,67 @@
 						</div>
 					</div> --%>
 				</div>
-				<div class="pricing-info">
-					<!-- <p class="price">€ 33</p> -->
-					<!-- <p><a href="<c:url value='/purchase-tickets'><c:param name="id" value="${list.id}"/></c:url>">Purchase</a></p> -->
-					<form id="downloadPdf" method="GET"
-						action="/addToGroup" novalidate="novalidate"
-						target="_blank">
-						<input type="hidden" name="id" value=${list.id } />
-						<button class="purchase-button">Add to Group</button>
-					</form>
-				</div>
+
+					<c:choose>
+						<c:when
+							test="${not fn:containsIgnoreCase(usersInGroup, list.email)}">
+							<div class="pricing-info">
+								<!-- <p class="price">€ 33</p> -->
+								<!-- <p><a href="<c:url value='/purchase-tickets'><c:param name="id" value="${list.id}"/></c:url>">Purchase</a></p> -->
+								<form id="addUser" method="GET" action="/addToGroup"
+									novalidate="novalidate">
+									<input type="hidden" name="id" value=${list.id } />
+									<button class="purchase-button">Add to Group</button>
+								</form>
+							</div>
+						</c:when>
+						<c:otherwise>
+							<div class="pricing-info">
+								<!-- <p class="price">€ 33</p> -->
+								<!-- <p><a href="<c:url value='/purchase-tickets'><c:param name="id" value="${list.id}"/></c:url>">Purchase</a></p> -->
+								<form id="removeUser" method="GET" action="/removeFromGroup"
+									novalidate="novalidate">
+									<input type="hidden" name="id" value=${list.id } />
+									<button class="remove-group">Remove from Group</button>
+								</form>
+							</div>
+						</c:otherwise>
+					</c:choose>
+
+					<%-- <c:choose>
+						<c:when test="${user.id == list.id}">
+							<div class="pricing-info">
+								<!-- <p class="price">€ 33</p> -->
+								<!-- <p><a href="<c:url value='/purchase-tickets'><c:param name="id" value="${list.id}"/></c:url>">Purchase</a></p> -->
+								<form id="downloadPdf" method="GET" action="/addToGroup"
+									novalidate="novalidate">
+									<input type="hidden" name="id" value=${list.id } />
+									<button class="purchase-button">Remove to Group</button>
+								</form>
+							</div>
+						</c:when>
+						<c:otherwise>
+							<div class="pricing-info">
+								<!-- <p class="price">€ 33</p> -->
+								<!-- <p><a href="<c:url value='/purchase-tickets'><c:param name="id" value="${list.id}"/></c:url>">Purchase</a></p> -->
+								<form id="downloadPdf" method="GET" action="/addToGroup"
+									novalidate="novalidate">
+									<input type="hidden" name="id" value=${list.id } />
+									<button class="purchase-button">Add to Group</button>
+								</form>
+							</div>
+						</c:otherwise>
+					</c:choose> --%>
+	
+
 			</div>
 		</c:forEach>
 		<form id="createGroup" method="GET" action="/makeGroup"
-			novalidate="novalidate" target="_blank">
+			novalidate="novalidate">
 			<label for="groupName" class="control-label">Group Name</label> <input
-			type="text" class="form-control" id="inputGroup" name="inputGroup"
-			value="" required="" title="Please enter you inputEmail"
-			placeholder="Electric Picnic Crew"> <span class="help-block"></span>
+				type="text" class="form-control" id="inputGroup" name="inputGroup"
+				value="" required="" title="Please enter you inputEmail"
+				placeholder="Electric Picnic Crew"> <span class="help-block"></span>
 			<button class="purchase-button">Create Group</button>
 		</form>
 	</div>

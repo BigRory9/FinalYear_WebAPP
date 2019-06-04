@@ -6,9 +6,11 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.Set;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -25,7 +27,6 @@ import com.google.gson.JsonParser;
 import com.roryharford.event.Event;
 import com.roryharford.user.security.BCrypt;
 
-//Starting application starts embedded database apache derby
 @Service
 public class UserService {
 
@@ -44,10 +45,10 @@ public class UserService {
 		return users;
 	}
 	
-	public List<User> getAllUsersForGroup(String email) {
+	public Set<User> getAllUsersForGroup(String email) {
 		// connects to the database and runs a query
 		List<User> allUsers = this.getAllUsers();
-		List<User> users = new ArrayList<>();
+		Set<User> users = new LinkedHashSet<>();
 		// adds each User into the array
 		for(int i=0; i<allUsers.size();i++) {
 			if(!allUsers.get(i).getEmail().equals(email))
@@ -65,11 +66,6 @@ public class UserService {
 		return customerRepository.getOne( id);
 	}
 	
-//	public User getUserByEmail(String email) {
-//		// return Users.stream().filter(t -> t.getId().equals(id)).findFirst().get();
-//		// It knows the id is a String because we set it in the User class
-//		return customerRepository.getOne(email);
-//	}
 
 	public void addUser(User user) {
 		customerRepository.save(user);
@@ -81,9 +77,6 @@ public class UserService {
 		customerRepository.save(user);
 	}
 
-//	public void deleteUser(int id) {
-//		customerRepository.deleteById( id);
-//	}
 
 	public User loginCustomer(String email, String password) {
 		User customer = this.getUserByEmail(email);
@@ -94,10 +87,7 @@ public class UserService {
 	}
 
 	public User createCustomer(User user) {
-//		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-//		user.setPassword(encoder.encode(user.getPassword()));
-	
-		System.out.println(user.getName());
+
 		this.addUser(user);
 		return user;
 
@@ -113,12 +103,4 @@ public class UserService {
 		
 	}
 
-//	public void createUser(User user) {
-//		user.setPassword(encoder.encode(user.getPassword())); 
-//		Role userRole = new Role("USER");
-//		List<Role> roles = new ArrayList<>();
-//		roles.add(userRole);
-//		user.setRoles(roles);
-//		userRepository.save(user);
-//		}
 }

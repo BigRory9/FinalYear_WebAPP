@@ -3,8 +3,11 @@ package com.roryharford.group;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -44,41 +47,46 @@ public class GroupController {
 	private UserService userService;
 	@Autowired
 	private GroupService groupService;
+	@Autowired
+	private TicketService ticketService;
 	
-	private List<User> userForAGroup = new ArrayList<>();
+	private Set<String> userForAGroup = new LinkedHashSet<>();
 
 	@RequestMapping(value = "/addToGroup", method = RequestMethod.GET)
 	public String addUserGroup(@RequestParam("id") String id,Model model,HttpSession session) {
 		User user = (User) session.getAttribute("user");
 		User friend = userService.getUser(Integer.parseInt(id));
-		this.userForAGroup.add(friend);
+		this.userForAGroup.add(friend.getEmail());
 		System.out.println(this.userForAGroup.size());
+		model.addAttribute("usersInGroup", userForAGroup);
+		model.addAttribute("lists", userService.getAllUsersForGroup(user.getEmail()));
+		return "viewUsers";
+	}
+	
+	@RequestMapping(value = "/removeFromGroup", method = RequestMethod.GET)
+	public String removeUserGroup(@RequestParam("id") String id,Model model,HttpSession session) {
+		User user = (User) session.getAttribute("user");
+		User friend = userService.getUser(Integer.parseInt(id));
+		this.userForAGroup.remove(friend.getEmail());
+		model.addAttribute("usersInGroup", userForAGroup);
 		model.addAttribute("lists", userService.getAllUsersForGroup(user.getEmail()));
 		return "viewUsers";
 	}
 	
 	
+	
 	@RequestMapping(value = "/makeGroup", method = RequestMethod.GET)
 	public String makeGroup(Model model,HttpSession session,@RequestParam("inputGroup") String groupName) {
-		System.out.println("The Group Name "+groupName);
 		User user = (User) session.getAttribute("user");
-		
-
-	    Group group = new Group(groupName);
-//	    group.setUser(user);
-	   
-//	    
-	    for(int i=0;i<this.userForAGroup.size();i++) {
-	    	 group.getFriends().add(this.userForAGroup.get(i));
+	    Group group = new Group(groupName);;
+    
+	    for(String email : this.userForAGroup) {
+	    	User friend =userService.getUserByEmail(email);
+	    	 group.getFriends().add(friend);
 	    }
 		group.setUser(user);
 	    groupService.addGroup(group);
-//	    userService.updateUser(Integer.toString(user.getId()), user);
-	    
-//	    groupService.updateGroup(group.getId(), group);
-//	   
-//	    
-//		model.addAttribute("lists", userService.getAllUsersForGroup(user.getEmail()));
+	    model.addAttribute("lists", ticketService.getEventList());
 		return "success";
 	}
 	
@@ -88,7 +96,7 @@ public class GroupController {
 	public String createGroup(Model model,HttpSession session) {
 		
 		User user = (User) session.getAttribute("user");
-		this.userForAGroup = new ArrayList<>();
+		this.userForAGroup = new LinkedHashSet<>();
 		model.addAttribute("lists", userService.getAllUsersForGroup(user.getEmail()));
 		return "viewUsers";
 	}

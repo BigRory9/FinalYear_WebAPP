@@ -95,21 +95,7 @@ public class TicketController {
 	@Autowired
 	private GroupService groupService;
 
-//	private List<User> userForAGroup = new ArrayList<>();
 
-//	@RequestMapping(value = "/tickets")
-//	public String countsList(Model model) {
-//	    model.addAttribute("tickets", ticketService.getAllTickets());
-//	    return "tickets";
-//	}
-
-	// deleted model user attribute
-//	@RequestMapping(value = "/purchase-tickets", method = RequestMethod.GET)
-//	public String purchase(@RequestParam("id") String id, HttpServletResponse httpServletResponse, HttpSession session, Model model) {
-//	//	System.out.println(id);
-//		model.addAttribute("id", id);
-//		return "creditCard";
-//	}
 
 	@RequestMapping(value = "/login/{pageNum}", method = RequestMethod.GET)
 	public String next(@RequestParam("pageNum") String pageNum, Model model) {
@@ -121,10 +107,10 @@ public class TicketController {
 	@RequestMapping(value = "/searchEvents", method = RequestMethod.GET)
 	public String searchEvents(@RequestParam("keyword") String keyword, Model model, HttpSession session) {
 		try {
-			System.out.println("Testing Mapping");
-			List<String> listOfIds = ticketService.serchKeyword(keyword);	
-			TimeUnit.SECONDS.sleep(1);
+			
+			List<String> listOfIds = ticketService.serchKeyword(keyword);		
 			for (int i = 0; i < listOfIds.size(); i++) {
+				TimeUnit.SECONDS.sleep((long) 0.5);
 				ticketService.createEventArray(listOfIds.get(i));
 			}
 			model.addAttribute("lists", ticketService.getEventList());
@@ -147,8 +133,6 @@ public class TicketController {
 				ticketDate = ticketDate.replace("\"", "");
 				Date date = inputFormat.parse(ticketDate);
 				todayDate = inputFormat.parse(inputFormat.format(new Date()));
-				System.out.println(date);
-				System.out.println(todayDate);
 				if (todayDate.before(date) || todayDate.equals(date)) {
 					userTickets.add(tickets.get(i));
 				}
@@ -167,8 +151,6 @@ public class TicketController {
 	public String process(@RequestParam("id") String id, HttpServletResponse httpServletResponse, HttpSession session,
 			Model model, HttpServletResponse response) throws AuthenticationException, InvalidRequestException,
 			APIConnectionException, CardException, APIException, WriterException, IOException {
-		System.out.println("ID BEING PASSED IN " + id);
-		System.out.println("HELLO");
 		Event event = ticketService.getOneEvent(id);
 		BasicAWSCredentials creds = new BasicAWSCredentials("AKIAJVL5I336SYABBB4A",
 				"I7gmPoB7tY5bUky5GjLsDijZucjLG/8sngV/UZg6");
@@ -193,16 +175,13 @@ public class TicketController {
 		// adding QR Code,
 		model.addAttribute("QRcode", base64Encoded);
 
-		System.out.println(imageName);
 		Ticket ticket = new Ticket(event.getDisplayName(), event.getArena(), event.getDate(), event.getPrice(),
 				event.getTime(), event.getLongitude(), event.getLatitude());
 
-		System.out.println(user.getName());
 		ticketService.createTicket(ticket);
 		user.addTicket(ticket);
 		userService.updateUser(id, user);
 		String name = ticket.getId() + ".png";
-		System.out.println("IMAGES NAME: " + name);
 		generateQRCodeImage(input, 300, 300, name);
 
 		model.addAttribute("name", user.getName());
@@ -227,7 +206,6 @@ public class TicketController {
 			HttpSession session, Model model, HttpServletResponse response) throws AuthenticationException,
 			InvalidRequestException, APIConnectionException, CardException, APIException, WriterException, IOException {
 
-		System.out.println("THE GROUP ID IS "+groupid);
 		// Getting the event
 		Event event = ticketService.getOneEvent(id);
 		// getting User from session will have to get this users group and loop around
@@ -239,7 +217,6 @@ public class TicketController {
 		AmazonS3 s3Client = AmazonS3Client.builder().withRegion("eu-west-1")
 				.withCredentials(new AWSStaticCredentialsProvider(creds)).build();
 
-		System.out.println("Users ID: " + user.getId());
 		// gets image name to get it off AWS
 		String imageName = "Image Number " + user.getId();
 		// Get a reference to the image Object
@@ -270,8 +247,6 @@ public class TicketController {
 
 		String name = ticket.getId() + ".png";
 		generateQRCodeImage(input, 300, 300, name);
-
-		System.out.println("IMAGES NAME: " + name);
 
 		model.addAttribute("name", user.getName());
 		model.addAttribute("ticket_id", ticket.getId());
@@ -334,9 +309,6 @@ public class TicketController {
 		User user = (User) session.getAttribute("user");
 		List<Group> usersGroups = groupService.getAllUsersGroups(user.getId());
 
-		for (int i = 0; i < usersGroups.size(); i++) {
-			System.out.println("GROUPS NAME" + usersGroups.get(i).getGroupName() + " " + usersGroups.size());
-		}
 
 		model.addAttribute("groups", usersGroups);
 		model.addAttribute("list", event);
@@ -355,12 +327,9 @@ public class TicketController {
 			AmazonS3 s3Client = AmazonS3Client.builder().withRegion("eu-west-1")
 					.withCredentials(new AWSStaticCredentialsProvider(creds)).build();
 			// Get a refernce to the image Object
-			System.out.println("V. important " + imageName);
 			S3Object s3object = s3Client.getObject(new GetObjectRequest("gigzeaze", imageName));
-//		ticketService.showPDF( ticket,  response);
 			response.setHeader("Content-Disposition", "attachment; filename=" + imageName);
 			S3ObjectInputStream s3is = s3object.getObjectContent();
-			System.out.println("V. important " + imageName);
 
 			response.flushBuffer();
 			return ResponseEntity.ok().contentType(org.springframework.http.MediaType.APPLICATION_PDF)
@@ -376,24 +345,6 @@ public class TicketController {
 		return null;
 
 	}
-//	
-//	public void showPDF(Ticket ticket, HttpServletResponse response) {
-//		try {
-//			DefaultResourceLoader loader = new DefaultResourceLoader();
-//			String name = ticket.getId() + "PDF.pdf";
-//			InputStream is;
-//
-//			is = loader.getResource("http://127.0.0.1:127/images/" + name).getInputStream();
-//
-//			IOUtils.copy(is, response.getOutputStream());
-//			// attachment if you want to download
-//			response.setHeader("Content-Disposition", "attachment; filename=" + name);
-//			response.flushBuffer();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//	}
 
 	private byte[] getQRCodeImage(String text, int width, int height) throws WriterException, IOException {
 		QRCodeWriter qrCodeWriter = new QRCodeWriter();

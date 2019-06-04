@@ -88,8 +88,6 @@ public class UserController {
 	@Autowired
 	private TicketService ticketService;
 
-//	@Autowired
-//	private TicketService ticketService;
 
 	@RequestMapping(value = "/")
 	public String index() {
@@ -103,42 +101,13 @@ public class UserController {
 		return "success";
 	}
 
-//	@RequestMapping(method = RequestMethod.POST, value = "/upload")
-//	public String handleFIleUpload(@RequestParam("file") MultipartFile file) {
-//		BasicAWSCredentials creds = new BasicAWSCredentials("AKIAITAEL7BGCI2WOZMA",
-//				"czY/LBxMNNgabRanQdt1pNm7jbM+Fl2iDKOFdjup");
-//		AmazonS3 s3Client = AmazonS3Client.builder().withRegion("eu-west-1")
-//				.withCredentials(new AWSStaticCredentialsProvider(creds)).build();
-//
-//		InputStream is;
-//		try {
-//			is = file.getInputStream();
-//
-//			// save on s3 wont allow me to save with public read access
-//			s3Client.putObject(new PutObjectRequest("tickets-fare-images", "newFile", is, new ObjectMetadata())
-//					.withCannedAcl(CannedAccessControlList.PublicRead));
-//
-//			// Get a refernce to the image Object
-//			S3Object s3object = s3Client.getObject(new GetObjectRequest("tickets-fare-images", "newFile"));
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//
-//		return "homepage";
-//
-//	}
+
 
 	@RequestMapping("/users")
 	public List<User> getAllUsers() {
 		System.out.println("ENTERED " + userService.getAllUsers().toString());
 		return userService.getAllUsers();
 	}
-
-//	@RequestMapping("/users/{id}")
-//	public User getUser(@PathVariable String id) {
-//		return userService.getUser(id);
-//	}
 
 	@PostMapping(value = "/users")
 	public void addUser(@RequestBody User User) {
@@ -150,10 +119,6 @@ public class UserController {
 		userService.updateUser(id, User);
 	}
 
-//	@DeleteMapping(value = "/users/{id}")
-//	public void deleteUser(@PathVariable String id) {
-//		userService.deleteUser(id);
-//	}
 
 	@RequestMapping(value = "/Customer", method = RequestMethod.GET)
 	public String Customer() {
@@ -240,8 +205,6 @@ public class UserController {
 		model.addAttribute("lists", ticketService.getEventList());
 		session.setAttribute("user", user);
 		return "success";
-//		}
-//  return null;
 
 	}
 

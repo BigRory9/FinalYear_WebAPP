@@ -81,40 +81,12 @@ public class TicketService {
 		return ticketRepository.getOne(id);
 	}
 
-//	
-//	public Customer getUser(String id) {
-//	//	return Users.stream().filter(t -> t.getId().equals(id)).findFirst().get();
-//		//It knows the id is a String because we set it in the User class
-//		return customerRepository.getOne(id);
-//	}
-//	
-//	public void addUser(Customer user) {
-//		customerRepository.save(user);
-//	}
-//
-//	public void updateUser(String id, Customer user) {
-//	 //A save can update and add a User because the User has information about what it is an a repository can check if it already exists or not.	
-//		customerRepository.save(user);
-//	}
-//
+
 	public void deleteEvent(int id) {
 		ticketRepository.deleteById(id);
 	}
 
-//	
-//	public Customer loginCustomer(String email, String password)
-//	{ 	
-//		List<Customer> Customers = this.getAllUsers();
-//		Customer customer = new Customer();
-//		for(int i=0; i<Customers.size();i++)
-//		{
-//		 customer =Customers.get(i);
-//		if(customer != null && customer.getPassword().equals(password) && customer.getEmail().equals(email)) {
-//			return customer;
-//		}
-//		}
-//		return null;
-//	}
+
 	public List<String> serchKeyword(String keyword) {
 		String id = "";
 		list = new ArrayList<Event>();
@@ -135,7 +107,6 @@ public class TicketService {
 
 					id = jobject.get("id").toString();
 					id = id.replace("\"", "");
-					System.out.println(id);
 					keywordList.add(id);
 				}
 			}
@@ -152,7 +123,7 @@ public class TicketService {
 	public List<Event> createEventArray(String keyword) {
 
 		try {
-			TimeUnit.SECONDS.sleep(1);
+			TimeUnit.SECONDS.sleep((long) 0.5);
 			String url = "https://app.ticketmaster.com/discovery/v2/events.json?attractionId=" + keyword
 					+ "&countryCode=IE&apikey=thlzRyuDZ6IGtUirirhnDPinG0Sgk2Ay";
 			String json = Jsoup.connect(url).ignoreContentType(true).execute().body();
@@ -170,12 +141,10 @@ public class TicketService {
 				for (int i = 0; i < entriesJSON.length(); i++) {
 					JsonElement jelement = new JsonParser().parse(entriesJSON.get(i).toString());
 					JsonObject jobject = jelement.getAsJsonObject();
-					System.out.println("ENTERED");
 					if (!jobject.get("name").equals(null)) {
 
 						id = jobject.get("id").toString();
 						name = jobject.get("name").toString();
-						System.out.println(name);
 						JsonArray imagesArray = jobject.getAsJsonArray("images");
 						for (int j = 0; j < imagesArray.size() && found == false; j++) {
 							JsonElement imagesElement = new JsonParser().parse(imagesArray.get(j).toString());
@@ -372,10 +341,7 @@ public class TicketService {
 	}
 
 	public Event getOneEvent(String id) {
-		System.out.println("SIZE OF LIST " + list.size());
-		System.out.println("SIZE OF ID " + id);
 		for (int i = 0; i < list.size(); i++) {
-			System.out.println("COMPARE ID " + id + " list ID " + list.get(i).getId());
 			if (list.get(i).getId().equals(id)) {
 				return list.get(i);
 			}
@@ -396,7 +362,6 @@ public class TicketService {
 					.getInstance("http://127.0.0.1:127/images/logo_2.png");
 			com.itextpdf.text.Image profile = com.itextpdf.text.Image
 					.getInstance(s3object.getObjectContent().getHttpRequest().getURI().toString());
-			System.out.println(ticket.getId());
 			com.itextpdf.text.Image qrCode = com.itextpdf.text.Image
 					.getInstance("http://127.0.0.1:127/images/" + ticket.getId() + ".png");
 			image.scalePercent(50);
@@ -438,9 +403,7 @@ public class TicketService {
 			MultipartFile multipartFile = new MockMultipartFile("file", file.getName(), "text/plain",
 					IOUtils.toByteArray(input));
 			InputStream is = multipartFile.getInputStream();
-//			    s3Client.putObject("someBucket", "foo/bar1", file1);
-//				s3Client.putObject(new PutObjectRequest("gigzeaze","ticket-PDFs/"+pdfName, is, new ObjectMetadata())
-//				.withCannedAcl(CannedAccessControlList.PublicRead));
+
 			s3Client.putObject(new PutObjectRequest("gigzeaze", pdfName, is, new ObjectMetadata())
 					.withCannedAcl(CannedAccessControlList.PublicRead));
 
